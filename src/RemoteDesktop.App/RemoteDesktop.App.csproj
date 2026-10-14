@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows10.0.19041.0</TargetFramework><UseWPF>true</UseWPF><Version>0.2.0</Version><Product>Project Remote</Product></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../RemoteDesktop.Core/RemoteDesktop.Core.csproj"/><ProjectReference Include="../RemoteDesktop.Capture/RemoteDesktop.Capture.csproj"/><PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0"/><PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0"/></ItemGroup>
+</Project>
