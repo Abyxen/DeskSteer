@@ -6,7 +6,7 @@ Updated: 2026-10-14 (Europe/Lisbon)
 
 **Milestone 1: foundation verified at the application level.** Tests exercise actual WPF navigation controls, preference save/reinitialization, diagnostic export/cancel and corrupt-settings recovery. All six views render at default and minimum sizes. Manual keyboard, system dialogs and DPI checks remain documented limitations.
 
-**Milestone 2: capture engine and preview verified; manual picker/display acceptance pending.** Real Windows Graphics Capture acquired pixels from disposable test-owned windows, resized the source, cancelled/disposed the capture and restarted it. Preview tests verify stop clears pixels and a new capture works. These tests do not establish manual Windows picker interaction or whole-display capture.
+**Milestone 2: local capture acceptance achieved on the current machine.** Real Windows Graphics Capture acquired pixels from disposable test-owned windows, resized the source, cancelled/disposed the capture and restarted it. Preview tests verify stop clears pixels and a new capture works. The user separately confirmed that Windows-picker cancellation, owned-window selection, whole-display preview, stopping and restarting all passed. This manual evidence is user-reported; the agent did not inspect the desktop through computer-use.
 
 Milestone 3 is next: authenticated LAN transport. No network connection or remote session exists.
 
@@ -31,13 +31,13 @@ Milestone 3 is next: authenticated LAN transport. No network connection or remot
 
 ## Known limitations
 
-- Windows picker selection/cancellation and whole-display selection need manual verification. Multiple monitors and DPI configurations are not certified.
+- User-reported picker/window/display checks passed on this machine. Other Windows devices, multiple monitors, keyboard navigation and DPI configurations are not certified.
 - Preview uses CPU readback and nearest-neighbor scaling. The 10 FPS cap and 1280×720 bound are implementation limits, not benchmark results. No performance benchmark or leak soak test is recorded.
 - No LAN/TLS transport, pairing, remote input, file transfer, internet connectivity, installer, signing or automatic update exists.
 - Diagnostic exports contain fixed event names/timestamps, with at most 200 records retained. They exclude image content and formatted exceptions.
 - Local preference writes are last-writer-wins across app instances. Preferences are not security authorization.
 - Branding is partly distributed across WPF resources, strings and project metadata. No accessibility compliance or independent security audit is claimed.
 
-## Next acceptance work
+## Next concrete milestone
 
-Complete the remaining manual checklist in [testing](docs/testing.md), especially Windows picker selection/cancel, display preview and stop/restart. Resolve any defects before declaring full Milestone 2 acceptance. Then implement Milestone 3 with bounded framing, authenticated TLS and two authorized Windows machines; loopback alone is insufficient for LAN acceptance.
+Begin Milestone 3: specify bounded/versioned framing and authenticated TLS trust, implement a host listener, approval and viewer, transmit compressed real frames, and verify disconnect/cancellation/slow-consumer behavior. LAN acceptance requires two authorized Windows computers displaying actual live frames; loopback alone is insufficient. Extended manual checks remain in [testing](docs/testing.md).

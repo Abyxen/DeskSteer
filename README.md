@@ -2,7 +2,7 @@
 
 An original Windows remote-desktop application, developed in verified milestones.
 
-**Current build: 0.2.0 capture preview.** The WPF foundation has application-level tests and rendered evidence. Real Windows Graphics Capture receives pixels, handles resize, and stops/restarts in tests using disposable test-owned windows. The Windows selection picker and whole-display selection still need manual acceptance. Networking, authentication, remote input and pairing are not implemented.
+**Current build: 0.2.0 capture preview. Milestones 1 and 2 verified on the current machine.** The WPF foundation has application-level tests and rendered evidence. Real Windows Graphics Capture receives pixels, handles resize, and stops/restarts in tests using disposable test-owned windows. The user also confirmed manual Windows-picker cancellation, window/display preview, stopping and restarting. Networking, authentication, remote input and pairing are not implemented.
 
 ## Run
 

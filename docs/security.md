@@ -4,7 +4,7 @@
 
 - No networking, remote input, startup registration, unattended access or privilege elevation.
 - Local screen capture uses explicit Windows picker selection in the application; the default capture border/cursor behavior is retained. Stop clears the preview and disposes resources. Pixels are not transmitted or exported.
-- Capture processing and preview dimensions are bounded; native surfaces above 16 megapixels are rejected. Manual picker/display acceptance is pending; native acquisition tests use only disposable test-owned windows.
+- Capture processing and preview dimensions are bounded; native surfaces above 16 megapixels are rejected. The user confirmed manual picker/display acceptance; native acquisition tests use only disposable test-owned windows.
 - Settings input is bounded to 4096 bytes before deserialization; invalid JSON is surfaced as a recoverable UI error.
 - Preference writes use a temporary file and replacement; cancellation cleans the temporary file.
 - Diagnostic records use a fixed enum. Export excludes user-controlled strings, machine identity, paths, credentials and image/input content.

@@ -7,7 +7,7 @@
 - Bounded processing to 10 FPS, preview to 1280×720 and native surfaces to 16 megapixels; retained two native buffers and one queued latest frame.
 - Fixed static-window resize recovery by replacing the capture pool/session generation.
 - Added actual WPF control/render tests and native capture/preview lifecycle tests using disposable owned windows.
-- Verified Release build and local tests; manual picker/display acceptance remains pending. No networking or remote input is implemented.
+- Verified Release build and local tests; the user confirmed manual picker/window/display, stop and restart acceptance on the current machine. No networking or remote input is implemented.
 - Added target-close, bounded-queue, concurrent-disposal and picker-race regression coverage; 22 tests pass locally with native capture enabled.
 - Published focused commits to private GitHub hosting and verified Windows CI (17 passed, 5 graphics tests intentionally skipped).
 

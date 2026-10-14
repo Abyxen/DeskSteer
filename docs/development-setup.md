@@ -17,4 +17,4 @@ Workspace commands: `./build.ps1` and `./build.ps1 -Launch`. The helper uses sin
 
 For a native executable launch using the workspace SDK, set `DOTNET_ROOT` to the absolute workspace `work/dotnet` directory, then run `src/RemoteDesktop.App/bin/Release/net10.0-windows10.0.19041.0/RemoteDesktop.App.exe`. `PROJECTREMOTE_DATA_DIR` optionally sets a disposable preference directory. There are no credentials or certificates to configure. The application/capture projects target net10.0-windows10.0.19041.0. Native capture tests require an interactive graphics session; see testing.md for opt-in commands.
 
-CI runs restore/build/test on windows-latest. It is configured but not remotely executed. No installer, auto-update channel, self-contained publish or release signing exists yet.
+CI runs restore/build/test on windows-latest. [GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed restore, Release compilation and tests; interactive graphics tests are intentionally skipped there. No installer, auto-update channel, self-contained publish or release signing exists yet.

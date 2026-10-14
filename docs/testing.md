@@ -32,9 +32,9 @@ Remove-Item Env:PROJECTREMOTE_EVIDENCE_DIR
 
 A default test run with capture skips establishes only the foundation/scaler checks. No network, remote input, throughput benchmark or resource-leak soak evidence is claimed.
 
-## Manual checks pending
+## Manual confirmation and extended checks
 
-Computer-use inspection of the live application was rejected by automatic approval review. The following remain manual checks:
+The user confirmed picker cancellation, owned-window preview, whole-display preview, Stop clearing the image, and restart all passed on the current machine. Computer-use inspection of the live application was rejected by automatic approval review; this is direct user-reported verification, separate from the native tests. Extended checks for wider compatibility remain:
 
 1. Launch, inspect all six destinations and exercise keyboard Tab/Enter focus.
 2. Save preferences, close/relaunch and confirm the start page; exercise the native diagnostic save dialog and cancellation.
@@ -43,4 +43,4 @@ Computer-use inspection of the live application was rejected by automatic approv
 5. Resize/move/close that window; verify recovery and stop. Select again, then leave Host session and close the app during capture.
 6. Select a display; check preview and stop/restart. Repeat across available monitors and DPI configurations.
 
-Milestone 1 has application-level verification. Full Milestone 2 acceptance awaits the picker/display checks. Milestone 3 LAN acceptance requires two authorized Windows computers; loopback alone cannot establish it.
+Milestone 1 has application-level verification; Milestone 2 has native automated evidence and user-reported picker/display acceptance. These results do not certify every Windows/DPI configuration. Milestone 3 LAN acceptance requires two authorized Windows computers; loopback alone cannot establish it.
