@@ -8,6 +8,10 @@ Core tests cover navigation validation/notifications, preference defaults/persis
 
 Native tests create visible disposable windows containing test-owned content. `RealGraphicsCaptureReceivesPixelsResizesAndRestarts` checks actual colored pixels, native resize recovery, cancellation and a fresh capture. `PreviewClearsOnStopAndCanRestart` uses real capture with the WPF preview. The frame scaler also checks bounds, aspect ratio and pixels. Test capture does not target the user's applications or personal desktop.
 
+Additional regressions cover target closure, slow-consumer dropped frames and latest pixels, disposing before enumeration, concurrent disposal, late picker results, selection errors, cancelled selection and four repeated preview starts/stops.
+
+[GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed the Windows Release build (0 warnings/errors), 7 core tests and 10 application tests. Five tests requiring an interactive graphics desktop were intentionally skipped in CI; their actual native results come from the local 22-test run.
+
 ## Reproduce
 
 For ordinary build/tests:

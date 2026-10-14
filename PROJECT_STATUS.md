@@ -19,13 +19,15 @@ Milestone 3 is next: authenticated LAN transport. No network connection or remot
 - `RealGraphicsCaptureReceivesPixelsResizesAndRestarts` checks actual colored pixels, changed dimensions, resize metrics, cancellation and a new capture.
 - `PreviewClearsOnStopAndCanRestart` exercises the WPF preview lifecycle against native capture.
 - Computer-use inspection of the live application was rejected by automatic approval review. Application tests and off-screen WPF rendering provide separate evidence; live desktop clicks and system dialogs remain unverified.
-- GitHub CI configuration is present; local passing checks do not establish a remote CI run.
+- Published privately at [Abyxen/ProjectRemote](https://github.com/Abyxen/ProjectRemote), with focused commits for core, desktop/capture, CI and documentation/evidence, plus repository initialization.
+- [GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed: Release build 0 warnings/0 errors; 17 tests passed, 5 native graphics tests intentionally skipped on the CI runner. All 22 tests passed locally with native capture enabled.
 
 ## Defects resolved
 
 - Added application tests for foundation behavior and rendered all six views at default/minimum sizes.
 - Fixed static-window resize recovery: `FramePool.Recreate` alone stalled in the native test. Capture now disposes the old pool/session and creates a fresh generation after returning the checked-out frame. Resize/restart tests pass.
 - Corrected executable target paths to `net10.0-windows10.0.19041.0`.
+- Fixed recursive window closing, source-close cancellation handling, late picker cleanup, simultaneous disposal and startup navigation during preference loading. Parallel review added regression tests for these lifecycle paths and bounded slow-consumer behavior.
 
 ## Known limitations
 
