@@ -1,10 +1,8 @@
 # Development setup
 
-Use Windows with the .NET 10 SDK and Windows Desktop runtime. The downloaded Windows x64 SDK 10.0.402 includes the desktop tooling used here. Visual Studio is optional for command-line builds. Official installation information: https://learn.microsoft.com/dotnet/core/install/windows . Supported OS matrix: verify against Microsoft's current .NET support policy before distribution; this project has not certified a Windows version matrix.
+Build on Windows with .NET SDK 10.0.402 and desktop tooling. `global.json` pins that SDK with latest-patch roll-forward; NuGet.Config uses the public NuGet v3 feed. The application/capture target is `net10.0-windows10.0.19041.0`; the project has not certified a complete Windows version/DPI matrix. Native graphics tests require an interactive desktop.
 
-`global.json` pins 10.0.402 with latest-patch roll-forward. NuGet.Config specifies the public NuGet v3 feed. .NET dependencies were restored and compiled successfully; licenses are summarized in security.md.
-
-Standard commands from the repository:
+From the repository:
 
 ```powershell
 dotnet restore ProjectRemote.slnx --configfile NuGet.Config
@@ -13,8 +11,22 @@ dotnet test ProjectRemote.slnx -c Release --no-build
 dotnet run --project src/RemoteDesktop.App
 ```
 
-Workspace commands: `./build.ps1` and `./build.ps1 -Launch`. The helper uses single-node MSBuild and workspace caches to accommodate this environment's restrictions. It exits on restore, build or test failure. Build artifacts are not release packages.
+`./build.ps1` restores, builds and tests, failing on any unsuccessful step. `./build.ps1 -Launch` also starts the app. It prefers the supplied SDK at `../../work/dotnet`, uses single-node MSBuild, and isolates SDK/NuGet/application test data in workspace `work/`. It changes process environment variables; use a fresh terminal afterward.
 
-For a native executable launch using the workspace SDK, set `DOTNET_ROOT` to the absolute workspace `work/dotnet` directory, then run `src/RemoteDesktop.App/bin/Release/net10.0-windows10.0.19041.0/RemoteDesktop.App.exe`. `PROJECTREMOTE_DATA_DIR` optionally sets a disposable preference directory. There are no credentials or certificates to configure. The application/capture projects target net10.0-windows10.0.19041.0. Native capture tests require an interactive graphics session; see testing.md for opt-in commands.
+To launch the framework-dependent native executable manually, set `DOTNET_ROOT` to the workspace `work/dotnet` path, then run `src/RemoteDesktop.App/bin/Release/net10.0-windows10.0.19041.0/RemoteDesktop.App.exe`. `PROJECTREMOTE_DATA_DIR` can select a disposable preference directory. No credentials or certificates need provisioning: hosting generates fresh connection details at runtime.
 
-CI runs restore/build/test on windows-latest. [GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed restore, Release compilation and tests; interactive graphics tests are intentionally skipped there. No installer, auto-update channel, self-contained publish or release signing exists yet.
+## Portable LAN candidate
+
+```powershell
+./package.ps1
+```
+
+This first invokes `build.ps1`, then publishes a self-contained `win-x64` folder, copies the LAN guide into it and creates `../ProjectRemote-LAN-0.3.0-win-x64.zip` plus `.sha256`. A successful package does not need a separate .NET runtime on the destination machine. Extract the full archive and run `RemoteDesktop.App.exe`; retain its adjacent files. This is an unsigned development candidate, with no installer or automatic updater.
+
+Use `./package.ps1 -DestinationPath 'C:\path\new-candidate.zip'` for a different output. The script refuses to overwrite an existing archive. Native capture tests are opt-in; set the variables in [testing](testing.md) before packaging to include them in its validation step. Packaging is a workflow definition until a successful run/archive is recorded in the handoff.
+
+## LAN configuration and CI
+
+Host binds a specific private IPv4 address and a configurable port (UI default 47731); loopback is for same-machine development. No firewall rule is added automatically. Both computers require the same candidate and trusted network; follow [LAN acceptance](lan-test.md).
+
+Historical [GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed the 0.2 foundation/capture build and noninteractive tests, with interactive capture intentionally skipped. It does not validate the new 0.3 transport. The 0.3 candidate passed Release compilation with zero warnings/errors and all 83 native-enabled local tests. Packaging and two-computer results belong in [project status](../PROJECT_STATUS.md).

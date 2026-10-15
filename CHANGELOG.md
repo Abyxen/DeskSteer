@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-10-15 — view-only LAN candidate
+
+- Added private IPv4/loopback TCP transport with pinned TLS 1.2/1.3, ephemeral certificate and random expiring pairing code.
+- Added explicit host approval before capture streaming, one-viewer sessions, deadlines, heartbeats and cancellation/disposal.
+- Added Host/Connect WPF workflows with active indicators, stop/disconnect and transient connection details.
+- Added bounded JPEG quality-75 streaming, dimension validation before WIC decoding and received-frame statistics.
+- Added versioned framed messages with strict sequence/type/length validation and bounded authentication attempts.
+- Added two-computer LAN setup/acceptance guide. Release build passed with zero warnings/errors and all 83 native-enabled local tests passed, including actual capture → JPEG → TLS → viewer decode. Milestone 3 remains pending two-computer acceptance.
+- No automatic firewall changes, remote input, audio, file transfer or internet relay.
 ## 0.2.0 — 2026-10-14 — local capture preview
 
 - Added an `IScreenCapture` boundary, Windows Graphics Capture implementation and system selection picker.

@@ -1,26 +1,30 @@
 # Testing
 
-## Recorded local evidence
+## Current 0.3 candidate
 
-SDK 10.0.402 on Windows 11 Home 10.0.26300: Release build succeeded with 0 warnings/0 errors. With native capture enabled, 15 application tests and 7 core tests passed, without failures or skips. TRX files are in ignored `artifacts/test-results`; rendered views and capture PNGs are in `evidence/verified/`.
+The complete native-enabled Release run passed with **83 tests: 27 application, 7 core and 49 transport; zero failures and zero skips**. Compilation succeeded with zero warnings/errors. The run includes actual test-owned Windows Graphics Capture → JPEG → TLS → viewer decode, rather than substituting generated frames for the native pipeline. Eight LAN UI checks include the default approval prompt with a 64-character viewer name. See [project status](../PROJECT_STATUS.md) for the recorded run and handoff artifacts.
 
-Core tests cover navigation validation/notifications, preference defaults/persistence, corrupt and oversized input, and cancelled-save cleanup. Application tests use actual WPF controls on an STA dispatcher: all navigation destinations, saving/reinitializing preferences, allowlisted export/cancel, corrupt-settings feedback and rendering all six pages at 1140×740 and 820×580. Off-screen rendering does not verify native input, Windows dialogs or DPI configurations.
+Transport/JPEG checks cover malformed/oversized/out-of-order messages, wrong pin/code, explicit approval/decline/timeout, no frame production before approval, cancellation/disposal, session expiry and bounded JPEG validation. WPF integration checks exercise real Host/Connect workflows and cleanup. Native tests capture only disposable owned windows. Loopback tests establish the local TLS pipeline; they do not establish two-computer LAN/firewall behavior.
 
-Native tests create visible disposable windows containing test-owned content. `RealGraphicsCaptureReceivesPixelsResizesAndRestarts` checks actual colored pixels, native resize recovery, cancellation and a fresh capture. `PreviewClearsOnStopAndCanRestart` uses real capture with the WPF preview. The frame scaler also checks bounds, aspect ratio and pixels. Test capture does not target the user's applications or personal desktop.
+Initial TLS runs exposed a Schannel incompatibility with the generated ECDSA key. The corrected temporary Windows UserKeySet import passed the full run above. No certificate/trust-store installation is required.
 
-Additional regressions cover target closure, slow-consumer dropped frames and latest pixels, disposing before enumeration, concurrent disposal, late picker results, selection errors, cancelled selection and four repeated preview starts/stops.
+## Historical 0.2 evidence
 
-[GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed the Windows Release build (0 warnings/errors), 7 core tests and 10 application tests. Five tests requiring an interactive graphics desktop were intentionally skipped in CI; their actual native results come from the local 22-test run.
+On Windows 11 Home 10.0.26300 with SDK 10.0.402, the 0.2 Release build passed with zero warnings/errors and all 22 local tests passed: 15 application and 7 core, with native capture enabled and no skips. Rendered views and captured PNGs are in `evidence/verified/`.
 
-## Reproduce
+Core checks cover navigation, preference defaults/persistence, corrupt/oversized settings and cancelled-save cleanup. WPF checks exercise actual controls, all destinations, preference save/reinitialization, allowlisted diagnostics/cancel and rendering at 1140×740 and 820×580. Native tests verify actual pixels, resize, cancellation, source closure, slow-consumer latest-frame behavior and stop/restart. Regressions also cover disposal before enumeration/concurrent disposal, late/cancelled picker results, selection failure and repeated preview starts/stops. Native tests capture only disposable windows they create.
 
-For ordinary build/tests:
+Historical [GitHub Actions run 1](https://github.com/Abyxen/ProjectRemote/actions/runs/38644851962) passed the 0.2 Windows Release build, 7 core tests and 10 application tests; five interactive graphics tests were skipped there. These counts/results do not describe the current 0.3 suite.
+
+The user confirmed Windows-picker cancellation, window/display preview, Stop clearing the image and restart on the current machine. Computer-use inspection was rejected by automatic approval review, so that manual evidence is user-reported separately from automated tests.
+
+## Reproduce current tests
 
 ```powershell
 ./build.ps1
 ```
 
-Native capture needs an interactive Windows graphics session and is skipped by default on unsuitable CI/headless sessions. To include it and save evidence:
+Native capture requires an interactive Windows graphics desktop and is skipped by default. To enable it and write disposable test-content evidence:
 
 ```powershell
 $env:PROJECTREMOTE_CAPTURE_TESTS = '1'
@@ -30,17 +34,10 @@ Remove-Item Env:PROJECTREMOTE_CAPTURE_TESTS
 Remove-Item Env:PROJECTREMOTE_EVIDENCE_DIR
 ```
 
-A default test run with capture skips establishes only the foundation/scaler checks. No network, remote input, throughput benchmark or resource-leak soak evidence is claimed.
+TRX files go to ignored `artifacts/test-results`. Evidence for current runs should use a new directory; do not relabel historical renders as new validation. For a self-contained candidate, `./package.ps1` runs the build/test helper before publishing/archiving; see [setup](development-setup.md).
 
-## Manual confirmation and extended checks
+## Acceptance and compatibility
 
-The user confirmed picker cancellation, owned-window preview, whole-display preview, Stop clearing the image, and restart all passed on the current machine. Computer-use inspection of the live application was rejected by automatic approval review; this is direct user-reported verification, separate from the native tests. Extended checks for wider compatibility remain:
+Milestones 1/2 have application/native evidence and user-reported picker/display acceptance. Extended checks remain for keyboard focus, native save dialogs, minimum/maximized layout, multiple monitors and 100%/150%/200% scaling. Off-screen WPF rendering does not establish these configurations.
 
-1. Launch, inspect all six destinations and exercise keyboard Tab/Enter focus.
-2. Save preferences, close/relaunch and confirm the start page; exercise the native diagnostic save dialog and cancellation.
-3. Check minimum size, maximization and 100%/150%/200% scaling.
-4. In Host session, open the Windows picker, cancel it, reopen and select an owned window. Verify actual content and capture status.
-5. Resize/move/close that window; verify recovery and stop. Select again, then leave Host session and close the app during capture.
-6. Select a display; check preview and stop/restart. Repeat across available monitors and DPI configurations.
-
-Milestone 1 has application-level verification; Milestone 2 has native automated evidence and user-reported picker/display acceptance. These results do not certify every Windows/DPI configuration. Milestone 3 LAN acceptance requires two authorized Windows computers; loopback alone cannot establish it.
+Milestone 3 requires the full [two-computer LAN checklist](lan-test.md), including actual changing pixels, wrong credentials, decline/approval timeout, stop/disconnect, page/app closure, network interruption and fresh-session restart. No remote-input acceptance is applicable: that feature is absent. No latency/throughput benchmark, resource-leak soak, broad Windows compatibility certification or independent security audit is claimed.
