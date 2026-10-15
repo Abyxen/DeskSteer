@@ -2,11 +2,11 @@
 
 An original Windows remote-desktop application, developed in verified milestones.
 
-**Current source: 0.4.0 remote-input candidate, validation in progress.** Viewing over pinned TLS now has an optional, separately approved keyboard/mouse mode. Milestone 4 is not accepted: real input needs the [two-computer input checks](docs/input-test.md). The input backend has 16 passing recording tests; these do not execute real Windows `SendInput`. Current full-suite results are recorded in [project status](PROJECT_STATUS.md).
+**Current source: 0.4.0 remote-input candidate.** Viewing over pinned TLS now has an optional, separately approved keyboard/mouse mode. Milestone 4 still needs the [two-computer input checks](docs/input-test.md). The input backend has 16 passing recording tests; these do not execute real Windows `SendInput`. The current automated suite passed with 128 tests and six intentionally skipped native capture checks.
 
 Milestone 3 was accepted from the user reporting all LAN checks passed on two authorized Windows computers using the earlier 0.3.0 build. The agent did not inspect that session; OS versions and duration were not supplied. DeskSteer 0.3.1 subsequently passed its branding validation and [Windows CI](https://github.com/Abyxen/DeskSteer/actions/runs/38702563482). These historical results do not establish 0.4.0 acceptance.
 
-Repository: [Abyxen/DeskSteer](https://github.com/Abyxen/DeskSteer), public. Candidate ZIPs supplied in chat are local artifacts, not GitHub release downloads. The historical branded package is `DeskSteer-LAN-0.3.1-win-x64-candidate.zip`; no new 0.4.0 ZIP is claimed yet. Build/package commands below create an artifact locally. Extract a complete self-contained package and run `DeskSteer.App.exe`.
+Repository: [Abyxen/DeskSteer](https://github.com/Abyxen/DeskSteer), public. The verified local candidate is `DeskSteer-LAN-0.4.0-final.zip`; it is supplied as a local artifact rather than a GitHub release download. Build/package commands below create an artifact locally. Extract a complete self-contained package and run `DeskSteer.App.exe`.
 
 ## Run
 

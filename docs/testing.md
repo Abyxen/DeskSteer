@@ -2,7 +2,7 @@
 
 ## Current 0.4.0 input candidate
 
-Full candidate validation is in progress; no passing combined-suite count or Milestone 4 acceptance is claimed. Sixteen native input tests passed using a recording backend, without real SendInput. Transport recording-sink and WPF checks are being added/run separately; see PROJECT_STATUS.md for finalized results. Real keyboard/mouse, wheel, foreground targeting, held-state release, revoke/stop and geometry invalidation require the [two-computer input checklist](input-test.md).
+Automated candidate validation passed: 128 tests passed and six native capture tests were intentionally skipped. Sixteen native input tests use a recording backend without real SendInput. Real keyboard/mouse, wheel, foreground targeting, held-state release, revoke/stop and geometry invalidation require the [two-computer input checklist](input-test.md).
 
 The [DeskSteer 0.3.1 CI run](https://github.com/Abyxen/DeskSteer/actions/runs/38702563482) passed for the branding release. It is historical evidence and does not validate the 0.4 input extension.
 

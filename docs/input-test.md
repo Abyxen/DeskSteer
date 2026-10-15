@@ -4,7 +4,7 @@ DeskSteer 0.4.0 implements an input candidate. **Milestone 4 is not accepted.** 
 
 ## Set up
 
-1. Build the same 0.4.0 candidate on both computers, or use a completed package explicitly supplied in the chat. No 0.4.0 ZIP is claimed by this guide. Complete the [LAN connection steps](lan-test.md), including separate fingerprint verification.
+1. Build the same 0.4.0 candidate on both computers, or use the supplied `DeskSteer-LAN-0.4.0-final.zip`. Complete the [LAN connection steps](lan-test.md), including separate fingerprint verification.
 2. On the host, open a disposable Notepad document and a scrollable test window on the primary display. Run both apps normally, without administrator elevation. Clear unsaved personal work from the intended test area.
 3. First leave **Share the primary display with optional keyboard and mouse control** unchecked. Start sharing through the Windows picker, approve viewing and verify input is unavailable. This mode remains viewing only.
 4. Stop that session. Check the control option and start a new session. This shares the primary display directly instead of opening the picker. Approve viewing first; this approval alone grants no input authority.

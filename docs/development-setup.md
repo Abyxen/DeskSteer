@@ -1,6 +1,6 @@
 # Development setup
 
-Current source is DeskSteer 0.4.0 with protocol v2; use matching builds on both endpoints. Full validation and real input acceptance are pending. A new 0.4.0 package has not yet been recorded. Historical 0.3.1 packages/checksums below do not contain the input extension. The [0.3.1 branding CI](https://github.com/Abyxen/DeskSteer/actions/runs/38702563482) passed; new candidate results belong in PROJECT_STATUS.md.
+Current source is DeskSteer 0.4.0 with protocol v2; use matching builds on both endpoints. Automated validation passed; real input acceptance remains pending. The verified local package is `DeskSteer-LAN-0.4.0-final.zip`. Historical 0.3.1 packages/checksums below do not contain the input extension. The [0.4.0 CI run](https://github.com/Abyxen/DeskSteer/actions/runs/38706475732) passed.
 
 Build on Windows with .NET SDK 10.0.402 and desktop tooling. `global.json` pins that SDK with latest-patch roll-forward; NuGet.Config uses the public NuGet v3 feed. The application/capture target is `net10.0-windows10.0.19041.0`; the project has not certified a complete Windows version/DPI matrix. Native graphics tests require an interactive desktop.
 

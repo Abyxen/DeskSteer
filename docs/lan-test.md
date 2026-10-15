@@ -1,6 +1,6 @@
 # LAN setup and acceptance
 
-For current 0.4.0 source, both endpoints must use protocol v2. Default hosting remains viewing only; optional primary-display keyboard/mouse mode requires the separate [input checks](input-test.md). Historical packages below are local chat deliverables, not downloadable GitHub releases. Build a current candidate with the README commands or `package.ps1 -DestinationPath` and a new filename. No 0.4.0 ZIP is recorded yet.
+For current 0.4.0 source, both endpoints must use protocol v2. Default hosting remains viewing only; optional primary-display keyboard/mouse mode requires the separate [input checks](input-test.md). Historical packages below are local chat deliverables, not downloadable GitHub releases. Build a current candidate with the README commands or `package.ps1 -DestinationPath`; the verified local candidate is `DeskSteer-LAN-0.4.0-final.zip`.
 
 DeskSteer 0.3.1 is the renamed view-only LAN candidate. The acceptance below belongs to its predecessor 0.3.0 build; it is not a new two-computer test of the branded package. **Milestone 3 accepted:** the user reported "All two-computer LAN checks passed" on two authorized Windows computers. This is user-reported acceptance; the agent did not inspect the session. Windows versions and session duration were not supplied. The checklist remains below for reproducing acceptance on other devices. The historical build had no remote input. Current 0.4.0 implements an input candidate, with Milestone 4 acceptance pending.
 
