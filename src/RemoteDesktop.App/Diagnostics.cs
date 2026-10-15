@@ -4,7 +4,7 @@ using System.Text.Json;
 namespace RemoteDesktop.App;
 
 // Only fixed event names are accepted; never accept arbitrary exception text or user data.
-public enum DiagnosticEvent { Started, Navigated, SettingsLoaded, SettingsSaved, SettingsFailed, ExportFailed, CaptureStarted, CaptureStopped, CaptureFailed }
+public enum DiagnosticEvent { Started, Navigated, SettingsLoaded, SettingsSaved, SettingsFailed, ExportFailed, CaptureStarted, CaptureStopped, CaptureFailed, LanHostStarted, LanHostStopped, LanViewerConnected, LanViewerStopped, LanSessionFailed, LanRequestApproved, LanRequestDeclined }
 public sealed class Diagnostics
 {
     private readonly ConcurrentQueue<object> events = new();
@@ -13,5 +13,5 @@ public sealed class Diagnostics
         events.Enqueue(new { timestamp = DateTimeOffset.UtcNow, eventName = name.ToString() });
         while (events.Count > 200) events.TryDequeue(out _);
     }
-    public string Export() => JsonSerializer.Serialize(new { product = "Project Remote", version = "0.2.0", framework = Environment.Version.ToString(), events = events.ToArray() }, new JsonSerializerOptions { WriteIndented = true });
+    public string Export() => JsonSerializer.Serialize(new { product = "Project Remote", version = "0.3.0", framework = Environment.Version.ToString(), events = events.ToArray() }, new JsonSerializerOptions { WriteIndented = true });
 }

@@ -16,7 +16,11 @@ public partial class MainWindow : Window
     private readonly ILogger<MainWindow> logger;
     private readonly IDiagnosticDestination destination;
     private readonly CaptureView captureView;
+    private readonly LanHostView lanHostView;
+    private readonly LanConnectView lanConnectView;
     private bool allowClose;
+    private bool closing;
+    private bool navigating;
     private readonly CancellationTokenSource lifetime = new();
     private Preferences preferences = new();
     private bool saving;
@@ -27,13 +31,18 @@ public partial class MainWindow : Window
         this.navigation = navigation; this.store = store; this.diagnostics = diagnostics; this.logger = logger;
         this.destination = destination;
         captureView = new CaptureView(captureSelection ?? new CaptureSelection(), diagnostics);
+        lanHostView = new LanHostView(captureSelection ?? new CaptureSelection(), diagnostics);
+        lanConnectView = new LanConnectView(diagnostics);
         navigation.PropertyChanged += NavigationChanged;
         Loaded += async (_, _) => await InitializeAsync();
         Closing += async (_, e) =>
         {
             if (allowClose) return;
             e.Cancel = true;
-            await captureView.StopAsync();
+            if (closing) return;
+            closing = true;
+            Navigation.IsEnabled = false; PageContent.IsEnabled = false;
+            await StopSessionsAsync();
             // Closing cannot be called recursively inside its own event, even when Stop completes synchronously.
             await Task.Yield();
             allowClose = true;
@@ -58,16 +67,23 @@ public partial class MainWindow : Window
             else Status.Text = "";
         }
         catch (OperationCanceledException) { }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+        catch (Exception ex) when (ex is IOException or InvalidDataException or UnauthorizedAccessException or System.Text.Json.JsonException)
         { Status.Text = "Settings could not be read. Defaults are in use; saving replaces the settings file."; diagnostics.Record(DiagnosticEvent.SettingsFailed); }
         finally { Navigation.IsEnabled = true; PageContent.IsEnabled = true; }
     }
     private async void NavigateClick(object sender, RoutedEventArgs e)
     {
         var page = Enum.Parse<Page>((string)((Button)sender).Tag);
-        if (navigation.Current == Page.Host && page != Page.Host) await captureView.StopAsync();
-        navigation.Navigate(page);
+        await NavigateToAsync(page);
     }
+    internal async Task NavigateToAsync(Page page)
+    {
+        if (closing || navigating || navigation.Current == page) return;
+        navigating = true; Navigation.IsEnabled = false; PageContent.IsEnabled = false;
+        try { await StopSessionsAsync(); navigation.Navigate(page); }
+        finally { navigating = false; if (!closing) { Navigation.IsEnabled = true; PageContent.IsEnabled = true; } }
+    }
+    private Task StopSessionsAsync() => Task.WhenAll(captureView.StopAsync(), lanHostView.StopAsync(), lanConnectView.StopAsync());
     private void Render()
     {
         PageContent.Children.Clear(); Status.Text = "";
@@ -77,15 +93,17 @@ public partial class MainWindow : Window
         {
             case Page.Home:
                 Heading.Text = "A closer connection."; Subtitle.Text = "A considered workspace for remote support. Built around your consent.";
-                AddCard("A real preview, on your terms", "Select a display or window for a live local preview. Remote connections are a later milestone.");
-                AddCard("01   Connect to a computer", "The next connection milestone will bring authenticated, encrypted streaming to your local network.", "Explore connection status", () => navigation.Navigate(Page.Connect));
-                AddCard("02   Preview your workspace", "Choose a display or window using the Windows picker. Stop capture at any time.", "Open local preview", () => navigation.Navigate(Page.Host));
+                AddCard("Your workspace, within reach", "Share a selected screen with an approved viewer on your local network. Each session begins with your consent.");
+                AddCard("01   Connect to a computer", "Verify the host's connection details, request a view, and wait for their approval.", "Open connection", async () => await NavigateToAsync(Page.Connect));
+                AddCard("02   Share your workspace", "Select a window or display, verify your viewer, and stop sharing at any time.", "Open hosting", async () => await NavigateToAsync(Page.Host));
                 break;
             case Page.Connect:
                 Heading.Text = "Connect"; Subtitle.Text = "Local network first. Authenticated connections by design.";
-                AddCard("Connections are unavailable", "LAN streaming is scheduled for Milestone 3, after real screen capture is verified. This build opens no listening ports and makes no remote connections."); break;
+                PageContent.Children.Add(lanConnectView); break;
             case Page.Host:
                 Heading.Text = "Host a session"; Subtitle.Text = "Your screen stays yours.";
+                PageContent.Children.Add(lanHostView);
+                AddCard("Preview without sharing", "A local preview stays on this computer. It uses a separate selection from network sharing.");
                 PageContent.Children.Add(captureView); break;
             case Page.Devices:
                 Heading.Text = "Devices"; Subtitle.Text = "A home for the computers you trust.";
@@ -107,7 +125,7 @@ public partial class MainWindow : Window
                 };
                 panel.Children.Add(save); break;
             case Page.About:
-                Heading.Text = "Made to connect."; Subtitle.Text = "Project Remote · 0.2.0 · Local capture preview";
+                Heading.Text = "Made to connect."; Subtitle.Text = "Project Remote · 0.3.0 · LAN viewing preview";
                 AddCard("Built for Windows", $"WPF · .NET {Environment.Version}\nThis is an incremental development build, not a production remote-access product.");
                 AddCard("Diagnostics you can inspect", "Export a bounded set of event names and timestamps from this run. Exports exclude machine names, file paths, credentials, keystrokes and screen content.", "Export diagnostics…", ExportDiagnostics);
                 break;
