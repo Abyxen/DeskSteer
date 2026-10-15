@@ -14,7 +14,7 @@ public partial class LanConnectView : UserControl
     private bool stopping;
     internal string StatusText => ConnectionStatus.Text;
     internal System.Windows.Media.ImageSource? PreviewSource => Preview.Source;
-    public LanConnectView(Diagnostics diagnostics) { InitializeComponent(); this.diagnostics = diagnostics; }
+    public LanConnectView(Diagnostics diagnostics) { InitializeComponent(); this.diagnostics = diagnostics; InitializeInputEvents(); }
     private async void ConnectClick(object sender, RoutedEventArgs e) => await ConnectAsync();
     internal async Task ConnectAsync()
     {
@@ -35,6 +35,7 @@ public partial class LanConnectView : UserControl
         try
         {
             await using var viewer = await LanViewer.ConnectAsync(request, source.Token);
+            await Dispatcher.InvokeAsync(() => InitializeInputPipeline(viewer, source.Token));
             diagnostics.Record(DiagnosticEvent.LanViewerConnected);
             ConnectionStatus.Text = "Connected — waiting for the first shared frame…";
             await foreach (var frame in viewer.FramesAsync(source.Token).ConfigureAwait(false))
@@ -47,7 +48,7 @@ public partial class LanConnectView : UserControl
                     if (source.IsCancellationRequested || !ReferenceEquals(cancellation, source)) return;
                     ConnectionInputs.Visibility = Visibility.Collapsed;
                     var rate = received < 2 ? "measuring FPS" : $"{(received - 1) / Math.Max(0.001, elapsed.Elapsed.TotalSeconds):F1} received FPS";
-                    Preview.Source = bitmap; ViewerStatistics.Text = $"{frame.Width} × {frame.Height} · {rate} · {frame.Jpeg.Length:N0} JPEG bytes"; ConnectionStatus.Text = "● VIEWING ACTIVE — viewing only. Disconnect ends the session.";
+                    Preview.Source = bitmap; ViewerStatistics.Text = $"{frame.Width} × {frame.Height} · {rate} · {frame.Jpeg.Length:N0} JPEG bytes"; ConnectionStatus.Text = "● VIEWING ACTIVE — Disconnect ends the session.";
                 }).Task.ConfigureAwait(false);
             }
             await Dispatcher.InvokeAsync(() => { if (ReferenceEquals(cancellation, source)) ConnectionStatus.Text = "The host ended sharing."; });
@@ -57,6 +58,7 @@ public partial class LanConnectView : UserControl
         { diagnostics.Record(DiagnosticEvent.LanSessionFailed); await Dispatcher.InvokeAsync(() => ConnectionStatus.Text = "Connection ended. Verify the host details, approval and network availability."); }
         finally
         {
+            await StopInputPipelineAsync();
             diagnostics.Record(DiagnosticEvent.LanViewerStopped);
             await Dispatcher.InvokeAsync(() =>
             {
@@ -65,6 +67,7 @@ public partial class LanConnectView : UserControl
                 ConnectButton.IsEnabled = true; DisconnectButton.IsEnabled = false;
                 ConnectionInputs.Visibility = Visibility.Visible;
                 PairingCodeInput.Clear();
+                SetControlState(false, false);
             });
         }
     }

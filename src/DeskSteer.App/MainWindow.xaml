@@ -2,7 +2,7 @@
  <Grid Background="#131B25"><Grid.ColumnDefinitions><ColumnDefinition Width="224"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
   <Border Background="#18212C" BorderBrush="#303C4D" BorderThickness="0,0,1,0" Padding="22,28"><DockPanel>
    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,36"><TextBlock Text="↗" FontSize="36" Foreground="{StaticResource Accent}"/><TextBlock Text="DESKSTEER" FontWeight="SemiBold" FontSize="17"/><TextBlock Text="Your workspace, connected." Foreground="#A6B4C7" FontSize="12" Margin="0,8,0,0"/></StackPanel>
-   <StackPanel DockPanel.Dock="Bottom"><TextBlock Text="●  Local application" Foreground="{StaticResource Accent}"/><TextBlock Text="LAN viewing · v0.3.1" Foreground="#A6B4C7" Margin="0,8,0,0"/></StackPanel>
+   <StackPanel DockPanel.Dock="Bottom"><TextBlock Text="●  Local application" Foreground="{StaticResource Accent}"/><TextBlock Text="LAN viewing · v0.4.0" Foreground="#A6B4C7" Margin="0,8,0,0"/></StackPanel>
    <StackPanel x:Name="Navigation"><Button Content="Home" Tag="Home" Click="NavigateClick"/><Button Content="Connect" Tag="Connect" Click="NavigateClick"/><Button Content="Host session" Tag="Host" Click="NavigateClick"/><Button Content="Devices" Tag="Devices" Click="NavigateClick"/><Button Content="Settings" Tag="Settings" Click="NavigateClick"/><Button Content="About &amp; diagnostics" Tag="About" Click="NavigateClick"/></StackPanel>
   </DockPanel></Border>
   <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto"><StackPanel Margin="38,34">

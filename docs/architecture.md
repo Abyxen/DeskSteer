@@ -1,6 +1,6 @@
 # Architecture
 
-DeskSteer 0.3.1 retains the 0.3.0 architecture and composes WPF navigation/preferences, local capture and view-only LAN sharing. `DeskSteer.Core` holds navigation/storage, `IScreenCapture`, encoded-frame models and the shared bounded JPEG header validator. `DeskSteer.Capture` owns WinRT/Direct3D resources. `DeskSteer.Transport` owns private-address policy, certificate trust, framing and session lifetime. `DeskSteer.App` owns WPF views, JPEG encode/decode and explicit approval.
+DeskSteer 0.4.0 extends the LAN architecture with optional remote input and composes WPF navigation/preferences, local capture and view-only LAN sharing. `DeskSteer.Core` holds navigation/storage, `IScreenCapture`, encoded-frame models and the shared bounded JPEG header validator. `DeskSteer.Capture` owns WinRT/Direct3D resources. `DeskSteer.Transport` owns private-address policy, certificate trust, framing and session lifetime. `DeskSteer.App` owns WPF views, JPEG encode/decode and explicit approval.
 
 ```text
 App composition root → MainWindow
@@ -25,4 +25,10 @@ JPEG quality 75 encode/decode runs off the UI thread. The shared baseline-JPEG p
 
 Diagnostics retain at most 200 timestamp/fixed-event records. They omit pixels, endpoints, pins, tokens, viewer names and formatted exceptions. Preferences contain only a startup-page flag. Branding remains distributed across `App.xaml`, strings and project metadata.
 
-Milestone 3 was accepted from user-reported two-computer checks on the earlier 0.3.0 build. The renamed 0.3.1 source passed its full native-enabled local suite; its package verification/CI are tracked separately. The branding rebuild is not a new two-computer acceptance claim. Remote input, audio, file transfer, persistent device trust, internet coordination, WebRTC and relays are unimplemented.
+Milestone 3 was accepted from user-reported two-computer checks on the earlier 0.3.0 build. The renamed 0.3.1 source passed its full native-enabled local suite; its package verification/CI are tracked separately. The branding rebuild is not a new two-computer acceptance claim. Milestone 4 now implements a remote-input candidate, pending full validation and real two-computer acceptance. Audio, file transfer, persistent device trust, internet coordination, WebRTC and relays remain unimplemented.
+
+## Input authority
+
+The unchecked host control option uses the Windows picker and exposes no input sink. Opting in selects the primary display and constructs DeskSteer.Input.WindowsInputSink. Viewing approval precedes a second keyboard/mouse approval. HostControlSession serializes authority transitions, validates commands, rate-limits input to 200/s and releases remotely owned keys/buttons on revoke/stop. Geometry changes invalidate the input sink rather than remapping an existing control session.
+
+The viewer preview must be focused. It maps through the actual letterboxed image area, paces movement to 33 ms and feeds a 32-command queue. Focus/window deactivation releases control. A topmost host indicator offers revoke-while-viewing and stop-all; it registers Ctrl+Alt+F12 when available. The app runs asInvoker and uses ordinary SendInput under Windows UIPI restrictions. Keyboard targets the foreground application; mouse scope is the primary display. Recording tests verify native command construction without real input injection.

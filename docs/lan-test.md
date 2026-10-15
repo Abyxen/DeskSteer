@@ -1,8 +1,10 @@
 # LAN setup and acceptance
 
-DeskSteer 0.3.1 is the renamed view-only LAN candidate. The acceptance below belongs to its predecessor 0.3.0 build; it is not a new two-computer test of the branded package. **Milestone 3 accepted:** the user reported "All two-computer LAN checks passed" on two authorized Windows computers. This is user-reported acceptance; the agent did not inspect the session. Windows versions and session duration were not supplied. The checklist remains below for reproducing acceptance on other devices. Milestone 4 is in design; remote input is not implemented.
+For current 0.4.0 source, both endpoints must use protocol v2. Default hosting remains viewing only; optional primary-display keyboard/mouse mode requires the separate [input checks](input-test.md). Historical packages below are local chat deliverables, not downloadable GitHub releases. Build a current candidate with the README commands or `package.ps1 -DestinationPath` and a new filename. No 0.4.0 ZIP is recorded yet.
 
-Current DeskSteer 0.3.1 archive: [DeskSteer-LAN-0.3.1-win-x64-candidate.zip](../../DeskSteer-LAN-0.3.1-win-x64-candidate.zip). SHA-256: `7c32293c65b9e43f9884b07c3cb1eba8519bc7205241ec4c3c9de261f3877915`. Package validation passed 78 tests (21 application, 7 core, 50 transport), with six native checks skipped; the separate native-enabled branding run passed all 84.
+DeskSteer 0.3.1 is the renamed view-only LAN candidate. The acceptance below belongs to its predecessor 0.3.0 build; it is not a new two-computer test of the branded package. **Milestone 3 accepted:** the user reported "All two-computer LAN checks passed" on two authorized Windows computers. This is user-reported acceptance; the agent did not inspect the session. Windows versions and session duration were not supplied. The checklist remains below for reproducing acceptance on other devices. The historical build had no remote input. Current 0.4.0 implements an input candidate, with Milestone 4 acceptance pending.
+
+Current DeskSteer 0.3.1 archive: `DeskSteer-LAN-0.3.1-win-x64-candidate.zip`. SHA-256: `7c32293c65b9e43f9884b07c3cb1eba8519bc7205241ec4c3c9de261f3877915`. Package validation passed 78 tests (21 application, 7 core, 50 transport), with six native checks skipped; the separate native-enabled branding run passed all 84.
 
 Historical accepted 0.3.0 archive: the accepted 0.3.0 candidate (original branding), 72,214,743 bytes. It retains its original branding. Historical SHA-256: `5eda557439d536951020334ca5a900cfd7b37716b0713abf2b6ec4355312128a`.
 
@@ -25,7 +27,7 @@ Historical accepted 0.3.0 archive: the accepted 0.3.0 candidate (original brandi
 
 1. Open **Connect**. Enter the host's address, port, complete fingerprint, pairing code and your name.
 2. Confirm the fingerprint with the host through the separate trusted channel, then choose **Request view**.
-3. Ask the host to approve. Once approved, the selected screen should update. The viewer has no keyboard/mouse control.
+3. Ask the host to approve. Once approved, the selected screen should update. In the historical/default viewing flow the viewer has no keyboard/mouse control. Current 0.4.0 opt-in control requires separate host approval; see the input guide.
 4. Use **Disconnect / cancel** to stop. An ended session needs a fresh host session and fresh connection details.
 
 Pairing details expire after five minutes; host approval times out after 30 seconds. A host allows one approved session, ending after at most one hour. Restarting hosting creates a new certificate fingerprint and pairing code. Five failed authentication/approval attempts end the listener. Do not reuse old details.

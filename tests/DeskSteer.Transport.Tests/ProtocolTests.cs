@@ -43,7 +43,7 @@ public sealed class ProtocolTests
         switch (corruption)
         {
             case "magic": header[0] = 0; break;
-            case "version": BinaryPrimitives.WriteUInt16BigEndian(header.AsSpan(4), 2); break;
+            case "version": BinaryPrimitives.WriteUInt16BigEndian(header.AsSpan(4), (ushort)(ProtocolCodec.Version + 1)); break;
             case "type": BinaryPrimitives.WriteUInt16BigEndian(header.AsSpan(6), 65535); break;
             case "zero sequence": BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(8), 0); break;
             case "wrong sequence": BinaryPrimitives.WriteUInt32BigEndian(header.AsSpan(8), 2); break;

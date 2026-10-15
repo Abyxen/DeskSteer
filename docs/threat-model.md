@@ -1,6 +1,6 @@
 # Threat model
 
-Version 0.3.0 adds a private-LAN, view-only transport. This describes implemented boundaries, not a security audit or completed two-device acceptance.
+Version 0.4.0 adds optional separately approved input to private-LAN viewing. Milestone 4 remains pending real input acceptance. This describes implemented boundaries, not a security audit or completed two-device acceptance.
 
 | Asset / threat | Current response | Remaining scope |
 |---|---|---|
@@ -10,10 +10,10 @@ Version 0.3.0 adds a private-LAN, view-only transport. This describes implemente
 | Reusing old session details | Fresh ephemeral certificate and code on each new host; one approved session then listener closes | No persistent trusted-device identity or pairing store |
 | Malformed frames / resource exhaustion | Header/type/length/sequence checks before payload allocation; 2 MiB frame payload; JPEG header/dimension validation before WIC decode; 1280×720 preview limit | No independent fuzz/security audit or long-duration resource benchmark |
 | Slow/disconnected peer | Bounded latest-frame buffering, awaited writes/UI dispatch, timeouts, heartbeats, cancellation and one-hour session expiry | Supplied two-device LAN checks passed according to the user; broad network compatibility remains unverified |
-| Keystrokes and mouse control | No capture/transmission or protocol messages for remote input | A future milestone must add separate control approval and authorization |
+| Keystrokes and mouse control | Opt-in primary-display sharing, separate approval/current authority, command validation/rate limit, revoke/stop and held-state release | Foreground keyboard scope; primary mouse only; UIPI restrictions; physical/remote overlap cannot always be distinguished; real two-PC acceptance pending |
 | Public exposure | Explicit private IPv4/loopback binding; no wildcard/public/DNS/IPv6 endpoint, relay or automatic firewall change | User configures Private firewall access; no port forwarding |
 | Sensitive diagnostics | Fixed event names/timestamps; no pixels, endpoint, token, pin, viewer name or formatted exceptions | Recheck allowlist whenever events are added |
 | Local preference corruption/modification | Bounded JSON input and recoverable error; preferences contain a startup-page flag | Local same-user modification is outside the prototype's protection; never use preferences as authorization |
 | Certificate/key exposure | Fresh session identity; in-memory PFX round trip into Schannel-compatible UserKeySet without PersistKeySet; certificate disposal owns temporary Windows key backing cleanup; no application key files | No guarantee of secure erasure in managed/OS memory; compromised host process is outside this boundary |
 
-Stop/disconnect, leaving session pages or closing the app cancels work and disposes session/capture resources. The system capture border remains enabled. There is no unattended access, UAC bypass, hidden session, persistence installation, internet service or remote input.
+Stop/disconnect, leaving session pages or closing the app cancels work and disposes session/capture resources. The system capture border remains enabled. There is no unattended access, UAC bypass, hidden session, persistence installation or internet service. Remote input is a candidate at normal application privilege, with explicit opt-in and separate approval.

@@ -18,6 +18,7 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
     private readonly CancellationTokenSource lifetime = new();
     private readonly object lifecycle = new();
     private TcpClient? active;
+    private HostControlSession? controls;
     private Task? operation, disposal;
     private bool disposed;
     private int state = (int)LanSessionState.Listening;
@@ -27,6 +28,10 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
     public DateTimeOffset ExpiresAt { get; }
     public LanSessionState State => (LanSessionState)Volatile.Read(ref state);
     public event Action<LanSessionState>? StateChanged;
+    public bool HasControl => Volatile.Read(ref controls)?.HasControl ?? false;
+    public event Action<bool>? ControlChanged;
+
+    public Task RevokeControlAsync() => Volatile.Read(ref controls)?.RevokeAsync() ?? Task.CompletedTask;
 
     public LanHost(IPAddress bindAddress, int port = 0, LanOptions? options = null)
     {
@@ -43,18 +48,20 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
         catch { listener.Stop(); certificate.Dispose(); lifetime.Dispose(); CryptographicOperations.ZeroMemory(pairingToken); throw; }
     }
 
-    public Task RunAsync(Func<ViewerHello, CancellationToken, Task<bool>> approve, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationToken token = default)
+    public Task RunAsync(Func<ViewerHello, CancellationToken, Task<bool>> approve, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationToken token = default,
+        Func<ViewerHello, CancellationToken, Task<bool>>? approveControl = null, IRemoteInputSink? input = null)
     {
         ArgumentNullException.ThrowIfNull(approve); ArgumentNullException.ThrowIfNull(frames);
         lock (lifecycle)
         {
             ObjectDisposedException.ThrowIf(disposed, this);
             if (operation != null) throw new InvalidOperationException("A host serves one approved session. Create a new host to restart.");
-            return operation = RunCoreAsync(approve, frames, token);
+            return operation = RunCoreAsync(approve, frames, token, approveControl, input);
         }
     }
 
-    private async Task RunCoreAsync(Func<ViewerHello, CancellationToken, Task<bool>> approve, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationToken token)
+    private async Task RunCoreAsync(Func<ViewerHello, CancellationToken, Task<bool>> approve, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationToken token,
+        Func<ViewerHello, CancellationToken, Task<bool>>? approveControl, IRemoteInputSink? input)
     {
         using var run = CancellationTokenSource.CreateLinkedTokenSource(token, lifetime.Token);
         using var pairing = CancellationTokenSource.CreateLinkedTokenSource(run.Token);
@@ -110,7 +117,7 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
                     SetState(LanSessionState.Streaming);
                     using var session = CancellationTokenSource.CreateLinkedTokenSource(run.Token);
                     session.CancelAfter(options.SessionLifetime);
-                    await StreamAsync(connection, frames, session).ConfigureAwait(false);
+                    await StreamAsync(connection, frames, session, hello, approveControl, input).ConfigureAwait(false);
                     SetState(LanSessionState.Closed); return;
                 }
                 catch (Exception error) when (State != LanSessionState.Streaming && IsAttemptFailure(error) && !pairing.IsCancellationRequested)
@@ -128,14 +135,18 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
         finally { listener.Stop(); }
     }
 
-    private async Task StreamAsync(TransportConnection connection, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationTokenSource session)
+    private async Task StreamAsync(TransportConnection connection, Func<CancellationToken, IAsyncEnumerable<EncodedFrame>> frames, CancellationTokenSource session,
+        ViewerHello viewer, Func<ViewerHello, CancellationToken, Task<bool>>? approveControl, IRemoteInputSink? input)
     {
+        var control = new HostControlSession(connection, viewer, approveControl, input, options, session);
+        control.ControlChanged += ForwardControlChanged;
+        Volatile.Write(ref controls, control);
         var sender = SendFramesAsync(connection, frames, session.Token);
-        var receiver = ReceiveControlAsync(connection, session.Token);
+        var receiver = ReceiveControlAsync(connection, control, session.Token);
         var heartbeats = connection.HeartbeatsAsync(session.Token);
         try
         {
-            var first = await Task.WhenAny(sender, receiver, heartbeats).ConfigureAwait(false);
+            var first = await Task.WhenAny(sender, receiver, heartbeats, control.Failure).ConfigureAwait(false);
             await first.ConfigureAwait(false);
         }
         catch (OperationCanceledException) when (session.IsCancellationRequested) { }
@@ -144,7 +155,13 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
         finally
         {
             session.Cancel();
+            await control.StopAsync().ConfigureAwait(false);
+            control.ControlChanged -= ForwardControlChanged;
+            Volatile.Write(ref controls, null);
             await ObserveCompletionAsync(sender, receiver, heartbeats).ConfigureAwait(false);
+            // Cleanup errors, including OS-blocked native releases during normal
+            // disconnect, are material session failures rather than successful stops.
+            if (control.Failure.IsFaulted) await control.Failure.ConfigureAwait(false);
         }
     }
 
@@ -162,13 +179,22 @@ public sealed class LanHost : IDisposable, IAsyncDisposable
         await connection.WriteAsync(MessageType.Disconnect, [], token).ConfigureAwait(false);
     }
 
-    private static async Task ReceiveControlAsync(TransportConnection connection, CancellationToken token)
+    private void ForwardControlChanged(bool value) => ControlChanged?.Invoke(value);
+
+    private static async Task ReceiveControlAsync(TransportConnection connection, HostControlSession control, CancellationToken token)
     {
         while (true)
         {
             var message = await connection.ReadAsync(token).ConfigureAwait(false);
             if (message.Type == MessageType.Disconnect) return;
-            if (message.Type != MessageType.Heartbeat) throw new InvalidDataException("Viewer sent an unsupported message.");
+            switch (message.Type)
+            {
+                case MessageType.Heartbeat: break;
+                case MessageType.RequestControl: control.Request(); break;
+                case MessageType.ReleaseControl: Observe(control.RevokeAsync()); break;
+                case MessageType.RemoteInput: control.Apply(ProtocolCodec.DecodeInput(message.Payload)); break;
+                default: throw new InvalidDataException("Viewer sent an unsupported message.");
+            }
         }
     }
 

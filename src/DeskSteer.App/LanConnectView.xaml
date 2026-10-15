@@ -12,9 +12,11 @@
    </StackPanel>
    <WrapPanel Margin="0,12,0,0"><Button x:Name="ConnectButton" Content="Request view" Click="ConnectClick" Margin="0,0,12,10"/><Button x:Name="DisconnectButton" Content="Disconnect / cancel" Click="DisconnectClick" IsEnabled="False"/></WrapPanel>
    <TextBlock x:Name="ConnectionStatus" Text="Disconnected." Foreground="{StaticResource Accent}" AutomationProperties.LiveSetting="Polite"/>
+   <WrapPanel><Button x:Name="RequestControlButton" Content="Request keyboard and mouse" Click="RequestControlClick" IsEnabled="False" Margin="0,12,12,10"/><Button x:Name="ReleaseControlButton" Content="Release control" Click="ReleaseControlClick" IsEnabled="False" Margin="0,12,0,10"/></WrapPanel>
+   <TextBlock x:Name="ControlStatus" Text="Viewing only. Control needs separate host approval." AutomationProperties.LiveSetting="Polite"/>
   <TextBlock x:Name="ViewerStatistics" Margin="0,10,0,0"/>
   </StackPanel></Border>
-  <Border Background="#0D131B" BorderBrush="#303C4D" BorderThickness="1" CornerRadius="12" Padding="10" MinHeight="180"><Image x:Name="Preview" Stretch="Uniform" MaxHeight="460" AutomationProperties.Name="Shared screen, viewing only"/></Border>
+  <Border Background="#0D131B" BorderBrush="#303C4D" BorderThickness="1" CornerRadius="12" Padding="10" MinHeight="180"><Image x:Name="Preview" Stretch="Uniform" MaxHeight="460" Focusable="True" MouseMove="SharedScreenMouseMove" MouseDown="SharedScreenMouseDown" MouseUp="SharedScreenMouseUp" MouseLeave="SharedScreenMouseLeave" MouseWheel="SharedScreenMouseWheel" PreviewKeyDown="SharedScreenKeyDown" PreviewKeyUp="SharedScreenKeyUp" LostKeyboardFocus="SharedScreenLostKeyboardFocus" AutomationProperties.Name="Shared screen. Input requires separate approval and focus."/></Border>
  </StackPanel>
 </UserControl>
 

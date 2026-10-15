@@ -1,4 +1,4 @@
-param([string]$DestinationPath = (Join-Path $PSScriptRoot '..\DeskSteer-LAN-0.3.1-win-x64.zip'))
+param([string]$DestinationPath = (Join-Path $PSScriptRoot '..\DeskSteer-LAN-0.4.0-win-x64.zip'))
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 $destination = [IO.Path]::GetFullPath($DestinationPath)

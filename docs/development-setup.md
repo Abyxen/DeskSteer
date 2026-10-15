@@ -1,5 +1,7 @@
 # Development setup
 
+Current source is DeskSteer 0.4.0 with protocol v2; use matching builds on both endpoints. Full validation and real input acceptance are pending. A new 0.4.0 package has not yet been recorded. Historical 0.3.1 packages/checksums below do not contain the input extension. The [0.3.1 branding CI](https://github.com/Abyxen/DeskSteer/actions/runs/38702563482) passed; new candidate results belong in PROJECT_STATUS.md.
+
 Build on Windows with .NET SDK 10.0.402 and desktop tooling. `global.json` pins that SDK with latest-patch roll-forward; NuGet.Config uses the public NuGet v3 feed. The application/capture target is `net10.0-windows10.0.19041.0`; the project has not certified a complete Windows version/DPI matrix. Native graphics tests require an interactive desktop.
 
 From the repository:
@@ -29,4 +31,4 @@ Use `./package.ps1 -DestinationPath 'C:\path\new-candidate.zip'` for a different
 
 Host binds a specific private IPv4 address and a configurable port (UI default 47731); loopback is for same-machine development. No firewall rule is added automatically. Both computers require the same candidate and trusted network; follow [LAN acceptance](lan-test.md).
 
-Historical [GitHub Actions run 1](https://github.com/Abyxen/DeskSteer/actions/runs/38644851962) passed the 0.2 foundation/capture build and noninteractive tests, with interactive capture intentionally skipped. It does not validate the new 0.3 transport. The renamed source passed Release compilation with zero warnings/errors and all 84 native-enabled local tests (27 application, 7 core, 50 transport), before the final 0.3.1 metadata bump. Historical CI does not establish the renamed head: its next run awaits publication. Packaging and acceptance records belong in [project status](../PROJECT_STATUS.md).
+Historical [GitHub Actions run 1](https://github.com/Abyxen/DeskSteer/actions/runs/38644851962) passed the 0.2 foundation/capture build and noninteractive tests, with interactive capture intentionally skipped. It does not validate the new 0.3 transport. The renamed source passed Release compilation with zero warnings/errors and all 84 native-enabled local tests (27 application, 7 core, 50 transport), before the final 0.3.1 metadata bump. The later 0.3.1 branding CI passed at the link above; none of these historical runs establishes current input acceptance. Packaging and acceptance records belong in [project status](../PROJECT_STATUS.md).

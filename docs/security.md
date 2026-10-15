@@ -1,6 +1,6 @@
 # Security and privacy
 
-## Implemented in DeskSteer 0.3.1
+## Implemented in the DeskSteer 0.4.0 candidate
 
 - Windows picker explicitly selects a source; the normal capture border/cursor defaults remain. Local preview stays local. **Approved LAN sharing transmits the selected screen pixels** to the approved viewer over TLS.
 - TLS 1.2/1.3 validates an exact SHA-256 certificate pin, expected server name, validity, server-auth usage and a custom-trust chain. The fingerprint must be verified through a separate trusted channel. There is no accept-any-certificate callback.
@@ -18,8 +18,14 @@ Session certificates are generated per host. Schannel-compatible private-key loa
 
 Milestone 3 was accepted from user-reported two-computer checks on the earlier 0.3.0 build. DeskSteer 0.3.1 is its branding rebuild; no new two-computer inspection is claimed. Local test results and failures are tracked in [project status](../PROJECT_STATUS.md); no independent security audit, fuzz campaign or production guarantee is claimed.
 
-Remote keyboard/mouse input, audio, file transfer, persistent device identity/trust, unattended access, startup registration, privilege elevation, installers, signed updates and internet traversal are unimplemented. Compromised endpoints and compromised channels used to verify fingerprints are outside this prototype's protection. Local preferences are not encrypted and use last-writer-wins across app instances. Normal launch stores them under `%LOCALAPPDATA%/DeskSteer`; the build helper uses workspace test data.
+Remote keyboard/mouse input is an implemented candidate with separate explicit consent; real input acceptance remains pending. Audio, file transfer, persistent device identity/trust, unattended access, startup registration, privilege elevation, installers, signed updates and internet traversal are unimplemented. Compromised endpoints and compromised channels used to verify fingerprints are outside this prototype's protection. Local preferences are not encrypted and use last-writer-wins across app instances. Normal launch stores them under `%LOCALAPPDATA%/DeskSteer`; the build helper uses workspace test data.
 
 Dependencies are pinned in project files: Microsoft.Extensions.DependencyInjection/Logging 10.0.0 (MIT), xunit 2.9.3 (Apache-2.0), xunit.runner.visualstudio 3.1.5 (Apache-2.0), Microsoft.NET.Test.Sdk 17.14.1 (MIT). These versions are not a claim that they are newest; review package advisories before distribution.
 
 See [protocol](protocol.md), [threat model](threat-model.md) and [two-computer acceptance](lan-test.md).
+
+## Remote input boundary
+
+Viewing approval alone does not grant control. Default picker hosting has no input sink; the host must explicitly opt into primary-display sharing and separately approve a viewer control request. The claimed name is not identity. A topmost indicator and local revoke/stop controls remain available; Ctrl+Alt+F12 is advertised only if hotkey registration succeeds. Revoke releases input while preserving viewing; stop cancels all sharing. Each command is validated and requires current authority, with a 200/s limit. Focus loss, queue overflow, display geometry changes and session teardown invalidate/release input as appropriate.
+
+Input uses SendInput at normal asInvoker privilege. UIPI/elevated windows and UAC secure desktops may block input; there is no bypass or elevation. Keyboard control is foreground Windows scope, not a selected-app sandbox. Mouse control is limited to the primary display. Already-held physical keys/buttons are not adopted remotely; a physical press after the same remote down cannot be reliably distinguished and release cleanup may affect that overlapping state. No keystroke logging/persistence is added to diagnostics. Recording tests do not establish real Windows input acceptance; follow input-test.md on two authorized computers.

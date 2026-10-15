@@ -1,8 +1,14 @@
 # Testing
 
-## DeskSteer branding validation
+## Current 0.4.0 input candidate
 
-The renamed source passed the complete native-enabled Release suite: **84 tests (27 application, 7 core, 50 transport), zero failures/skips and zero warnings/errors**, before the final 0.3.1 version-metadata bump. The DeskSteer 0.3.1 package was built after a successful validation run: 78 tests passed (21 application, 7 core, 50 transport), six native checks skipped. Current archive SHA-256: `7c32293c65b9e43f9884b07c3cb1eba8519bc7205241ec4c3c9de261f3877915`. CI for the renamed head remains pending publication. Earlier acceptance and artifacts below are historical and do not establish a new two-computer test of the branded rebuild.
+Full candidate validation is in progress; no passing combined-suite count or Milestone 4 acceptance is claimed. Sixteen native input tests passed using a recording backend, without real SendInput. Transport recording-sink and WPF checks are being added/run separately; see PROJECT_STATUS.md for finalized results. Real keyboard/mouse, wheel, foreground targeting, held-state release, revoke/stop and geometry invalidation require the [two-computer input checklist](input-test.md).
+
+The [DeskSteer 0.3.1 CI run](https://github.com/Abyxen/DeskSteer/actions/runs/38702563482) passed for the branding release. It is historical evidence and does not validate the 0.4 input extension.
+
+## Historical DeskSteer branding validation
+
+The renamed source passed the complete native-enabled Release suite: **84 tests (27 application, 7 core, 50 transport), zero failures/skips and zero warnings/errors**, before the final 0.3.1 version-metadata bump. The DeskSteer 0.3.1 package was built after a successful validation run: 78 tests passed (21 application, 7 core, 50 transport), six native checks skipped. Historical 0.3.1 archive SHA-256: `7c32293c65b9e43f9884b07c3cb1eba8519bc7205241ec4c3c9de261f3877915`. The later 0.3.1 branding CI passed; its link is recorded above. Earlier acceptance and artifacts below are historical and do not establish a new two-computer test of the branded rebuild.
 
 ## Historical accepted 0.3.0 LAN milestone
 
@@ -49,4 +55,4 @@ TRX files go to ignored `artifacts/test-results`. Evidence for current runs shou
 
 Milestones 1/2 have application/native evidence and user-reported picker/display acceptance. Extended checks remain for keyboard focus, native save dialogs, minimum/maximized layout, multiple monitors and 100%/150%/200% scaling. Off-screen WPF rendering does not establish these configurations.
 
-The user explicitly reported "All two-computer LAN checks passed" for the 0.3 candidate on two authorized Windows computers. This accepts Milestone 3 against the [LAN checklist](lan-test.md), including changing pixels, credential rejection, approval/timeout, stop/disconnect, closure, network interruption and restart. This is user-reported acceptance, not agent inspection; OS versions and session duration were not provided. Milestone 4 is in design, with no remote input implementation or acceptance claimed. No latency/throughput benchmark, resource-leak soak, broad Windows compatibility certification or independent security audit is claimed.
+The user explicitly reported "All two-computer LAN checks passed" for the 0.3 candidate on two authorized Windows computers. This accepts Milestone 3 against the [LAN checklist](lan-test.md), including changing pixels, credential rejection, approval/timeout, stop/disconnect, closure, network interruption and restart. This is user-reported acceptance, not agent inspection; OS versions and session duration were not provided. Milestone 4 now has an implemented input candidate; real input acceptance remains pending. No latency/throughput benchmark, resource-leak soak, broad Windows compatibility certification or independent security audit is claimed.

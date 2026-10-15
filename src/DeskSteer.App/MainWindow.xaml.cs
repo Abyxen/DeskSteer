@@ -125,7 +125,7 @@ public partial class MainWindow : Window
                 };
                 panel.Children.Add(save); break;
             case Page.About:
-                Heading.Text = "Made to connect."; Subtitle.Text = "DeskSteer · 0.3.1 · LAN viewing preview";
+                Heading.Text = "Made to connect."; Subtitle.Text = "DeskSteer · 0.4.0 · LAN viewing and approved control preview";
                 AddCard("Built for Windows", $"WPF · .NET {Environment.Version}\nThis is an incremental development build, not a production remote-access product.");
                 AddCard("Diagnostics you can inspect", "Export a bounded set of event names and timestamps from this run. Exports exclude machine names, file paths, credentials, keystrokes and screen content.", "Export diagnostics…", ExportDiagnostics);
                 break;

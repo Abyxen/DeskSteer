@@ -5,14 +5,18 @@ using DeskSteer.Core;
 
 namespace DeskSteer.Transport;
 
-public enum MessageType : ushort { Authentication = 1, Approved = 2, Rejected = 3, Frame = 4, Heartbeat = 5, Disconnect = 6 }
+public enum MessageType : ushort
+{
+    Authentication = 1, Approved = 2, Rejected = 3, Frame = 4, Heartbeat = 5, Disconnect = 6,
+    RequestControl = 7, ControlGranted = 8, ControlRevoked = 9, RemoteInput = 10, ReleaseControl = 11
+}
 public sealed record ProtocolMessage(MessageType Type, uint Sequence, byte[] Payload);
 
 public static class ProtocolCodec
 {
     public const int HeaderLength = 16;
     public const int MaxPayloadLength = 2 * 1024 * 1024;
-    public const ushort Version = 1;
+    public const ushort Version = 2;
     private static readonly UTF8Encoding StrictUtf8 = new(false, true);
 
     public static async Task<ProtocolMessage> ReadAsync(Stream stream, uint expectedSequence, CancellationToken cancellationToken = default)
@@ -80,6 +84,29 @@ public static class ProtocolCodec
         return payload;
     }
 
+    public static byte[] EncodeInput(RemoteInputCommand command)
+    {
+        RemoteInputPolicy.Validate(command);
+        var payload = new byte[20];
+        BinaryPrimitives.WriteInt32BigEndian(payload, (int)command.Kind);
+        BinaryPrimitives.WriteInt32BigEndian(payload.AsSpan(4), command.X);
+        BinaryPrimitives.WriteInt32BigEndian(payload.AsSpan(8), command.Y);
+        BinaryPrimitives.WriteInt32BigEndian(payload.AsSpan(12), command.Code);
+        BinaryPrimitives.WriteInt32BigEndian(payload.AsSpan(16), command.Delta);
+        return payload;
+    }
+
+    public static RemoteInputCommand DecodeInput(byte[] payload)
+    {
+        ArgumentNullException.ThrowIfNull(payload);
+        ValidateLength(MessageType.RemoteInput, (uint)payload.Length);
+        var command = new RemoteInputCommand((RemoteInputKind)BinaryPrimitives.ReadInt32BigEndian(payload),
+            BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(4)), BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(8)),
+            BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(12)), BinaryPrimitives.ReadInt32BigEndian(payload.AsSpan(16)));
+        RemoteInputPolicy.Validate(command);
+        return command;
+    }
+
     public static (byte[] Token, ViewerHello Hello) DecodeAuthentication(byte[] payload)
     {
         ValidateLength(MessageType.Authentication, (uint)payload.Length);
@@ -112,7 +139,8 @@ public static class ProtocolCodec
         {
             MessageType.Authentication => length is >= 33 and <= 288,
             MessageType.Frame => length is >= 20 and <= MaxPayloadLength,
-            MessageType.Approved or MessageType.Rejected or MessageType.Heartbeat or MessageType.Disconnect => length == 0,
+            MessageType.RemoteInput => length == 20,
+            MessageType.Approved or MessageType.Rejected or MessageType.Heartbeat or MessageType.Disconnect or MessageType.RequestControl or MessageType.ControlGranted or MessageType.ControlRevoked or MessageType.ReleaseControl => length == 0,
             _ => false
         };
         if (!valid) throw new InvalidDataException("Invalid protocol message type or size.");

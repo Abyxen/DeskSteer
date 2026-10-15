@@ -11,7 +11,7 @@ public interface ICaptureSelection
     Task<IScreenCapture?> SelectAsync(Window owner, CancellationToken cancellationToken);
 }
 
-public sealed class CaptureSelection : ICaptureSelection
+public sealed partial class CaptureSelection : ICaptureSelection
 {
     private readonly CapturePicker picker = new();
     public bool IsSupported => picker.IsSupported;
