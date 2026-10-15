@@ -14,6 +14,7 @@ New-Item -ItemType Directory -Path $staging -Force | Out-Null
 & $sdk publish src/DeskSteer.App/DeskSteer.App.csproj -c Release -r win-x64 --self-contained true -m:1 --disable-build-servers -p:PublishTrimmed=false -p:PublishSingleFile=false "-p:RestoreConfigFile=$PSScriptRoot\NuGet.Config" -o $staging
 if ($LASTEXITCODE) { throw 'Portable publish failed' }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'docs\lan-test.md') -Destination (Join-Path $staging 'LAN-TEST.md')
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'docs\input-test.md') -Destination (Join-Path $staging 'INPUT-TEST.md')
 $notices = Join-Path $staging 'ThirdPartyNotices'
 New-Item -ItemType Directory -Path $notices | Out-Null
 $runtimeConfig = Get-Content -LiteralPath (Join-Path $staging 'DeskSteer.App.runtimeconfig.json') -Raw | ConvertFrom-Json
