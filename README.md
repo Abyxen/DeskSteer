@@ -2,7 +2,9 @@
 
 An original Windows remote-desktop application, developed in verified milestones.
 
-**Current build: 0.3.0 LAN candidate.** Milestones 1 and 2 are verified on the current machine, including the user's manual picker/window/display checks. The application now implements view-only sharing over pinned TLS on a private IPv4 network. **Milestone 3 awaits acceptance between two authorized Windows computers.** Release compilation passed with zero warnings/errors; all 83 native-enabled local tests passed. The run includes actual capture → JPEG → TLS → viewer decode. See [project status](PROJECT_STATUS.md) for evidence.
+**Current build: 0.3.0 LAN candidate.** Milestones 1 and 2 are verified on the current machine, including the user's manual picker/window/display checks. The application now implements view-only sharing over pinned TLS on a private IPv4 network. **Milestone 3 is accepted based on the user reporting that all LAN checks passed on two authorized Windows computers.** The agent did not inspect that two-computer session; OS versions and duration were not supplied. Release compilation passed with zero warnings/errors; the 83-test native-enabled local run and a separate backpressure regression passed. Milestone 4 is in design; remote input is not implemented. See [project status](PROJECT_STATUS.md) for evidence.
+
+The [self-contained Windows x64 candidate](../ProjectRemote-LAN-0.3.0-win-x64-candidate.zip) bundles .NET runtime 10.0.13; extract all files and run `RemoteDesktop.App.exe`. Archive extraction/startup smoke testing passed. See the [LAN guide](docs/lan-test.md) for setup and its checksum.
 
 ## Run
 
@@ -31,3 +33,4 @@ For a two-computer session, follow [LAN setup and acceptance](docs/lan-test.md).
 There is no remote keyboard/mouse input, audio, device persistence, file transfer, internet relay or unattended access. Branding remains partly distributed across application resources, strings and metadata. This is a development candidate, not a production release.
 
 See [project status](PROJECT_STATUS.md), [setup](docs/development-setup.md), [architecture](docs/architecture.md), [protocol](docs/protocol.md), [testing](docs/testing.md) and [security](docs/security.md).
+

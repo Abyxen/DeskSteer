@@ -1,9 +1,14 @@
 # Testing
 
-## Current 0.3 candidate
+## Accepted 0.3 LAN milestone
 
 The complete native-enabled Release run passed with **83 tests: 27 application, 7 core and 49 transport; zero failures and zero skips**. Compilation succeeded with zero warnings/errors. The run includes actual test-owned Windows Graphics Capture → JPEG → TLS → viewer decode, rather than substituting generated frames for the native pipeline. Eight LAN UI checks include the default approval prompt with a 64-character viewer name. See [project status](../PROJECT_STATUS.md) for the recorded run and handoff artifacts.
 
+A separately added backpressure regression also passed after that run. There are therefore 84 checks with passing evidence across the full 83-test run and the separate one-test run; a combined 84-test run has not been recorded.
+
+[0.3 Windows CI run](https://github.com/Abyxen/ProjectRemote/actions/runs/38700955338) passed 77 tests: 21 application, 7 core and 49 transport. Six native graphics tests were intentionally skipped in CI. These results complement the local native-enabled run.
+
+The self-contained Windows x64 archive `../ProjectRemote-LAN-0.3.0-win-x64-candidate.zip` was built with .NET runtime 10.0.13. Its extraction/startup smoke test passed. Size: 72,214,743 bytes; SHA-256: `5eda557439d536951020334ca5a900cfd7b37716b0713abf2b6ec4355312128a`.
 Transport/JPEG checks cover malformed/oversized/out-of-order messages, wrong pin/code, explicit approval/decline/timeout, no frame production before approval, cancellation/disposal, session expiry and bounded JPEG validation. WPF integration checks exercise real Host/Connect workflows and cleanup. Native tests capture only disposable owned windows. Loopback tests establish the local TLS pipeline; they do not establish two-computer LAN/firewall behavior.
 
 Initial TLS runs exposed a Schannel incompatibility with the generated ECDSA key. The corrected temporary Windows UserKeySet import passed the full run above. No certificate/trust-store installation is required.
@@ -40,4 +45,5 @@ TRX files go to ignored `artifacts/test-results`. Evidence for current runs shou
 
 Milestones 1/2 have application/native evidence and user-reported picker/display acceptance. Extended checks remain for keyboard focus, native save dialogs, minimum/maximized layout, multiple monitors and 100%/150%/200% scaling. Off-screen WPF rendering does not establish these configurations.
 
-Milestone 3 requires the full [two-computer LAN checklist](lan-test.md), including actual changing pixels, wrong credentials, decline/approval timeout, stop/disconnect, page/app closure, network interruption and fresh-session restart. No remote-input acceptance is applicable: that feature is absent. No latency/throughput benchmark, resource-leak soak, broad Windows compatibility certification or independent security audit is claimed.
+The user explicitly reported "All two-computer LAN checks passed" for the 0.3 candidate on two authorized Windows computers. This accepts Milestone 3 against the [LAN checklist](lan-test.md), including changing pixels, credential rejection, approval/timeout, stop/disconnect, closure, network interruption and restart. This is user-reported acceptance, not agent inspection; OS versions and session duration were not provided. Milestone 4 is in design, with no remote input implementation or acceptance claimed. No latency/throughput benchmark, resource-leak soak, broad Windows compatibility certification or independent security audit is claimed.
+

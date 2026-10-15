@@ -6,7 +6,7 @@ Updated: 2026-10-15 (Europe/Lisbon)
 
 Milestone 1 has application-level verification. Milestone 2 local capture acceptance was achieved on this machine: native tests check owned-window pixels, resize, cancellation and restart; the user confirmed Windows-picker cancellation, window/display preview, Stop and restart.
 
-**Milestone 3: implemented LAN viewing candidate, awaiting two-computer acceptance.** Version 0.3.0 includes an explicitly started private-IPv4 listener, pinned TLS, temporary pairing, host approval, bounded JPEG streaming and a real WPF viewer. The user has two authorized Windows computers available. Loopback evidence does not establish two-device LAN acceptance.
+**Milestone 3: LAN viewing acceptance achieved.** Version 0.3.0 includes an explicitly started private-IPv4 listener, pinned TLS, temporary pairing, host approval, bounded JPEG streaming and a real WPF viewer. The user confirmed that all supplied two-computer LAN checks passed, including live content, approval, Stop/disconnect and a fresh connection. This is user-reported acceptance; Windows versions and duration were not supplied. Milestone 4 separate input authorization is now being designed.
 
 ## Latest verification
 
@@ -17,7 +17,7 @@ Milestone 1 has application-level verification. Milestone 2 local capture accept
 - Actual WPF integration checks cover approval decline without capture, cancellation during a late picker result, viewing/disconnect cleanup, navigation/closing cleanup, secret clearing, and the default approval dialog with a 64-character name.
 - Transport checks cover wrong pin/token, expired/rotated credentials, explicit approval, idle heartbeats, partial/stalled handshakes, bounded protocol parsing, Unicode names and session expiry without an active frame reader.
 - WPF views rendered at 1140×740 and 820×580. Local TRX files are in ignored `artifacts/test-results`; candidate renders are in ignored `evidence/lan-candidate`.
-- Earlier 0.2.0 GitHub Actions builds passed. The 0.3.0 CI result will be recorded after publication.
+- [0.3 GitHub CI](https://github.com/Abyxen/ProjectRemote/actions/runs/38700955338) passed: 77 tests passed and 6 native graphics tests intentionally skipped; Release build passed. A separate real-TLS slow-receiver regression also passed after this full suite.
 
 ## Fixes in this increment
 
@@ -29,7 +29,7 @@ Milestone 1 has application-level verification. Milestone 2 local capture accept
 
 ## Remaining work and limits
 
-- Run the [two-computer LAN checklist](docs/lan-test.md), including changing live content, decline, wrong credentials, Stop/disconnect and reconnect. Candidate packaging is in progress.
+- The [two-computer LAN checklist](docs/lan-test.md) passed according to the user. The self-contained candidate ZIP is built, extracted and startup-smoke-tested: 72,214,743 bytes; SHA-256 `5eda557439d536951020334ca5a900cfd7b37716b0713abf2b6ec4355312128a`.
 - The view-only prototype is limited to private IPv4/loopback, one approved viewer, 1280×720 and at most 10 sent FPS. These bounds are implementation limits, not benchmark results.
 - No remote input, internet coordination/relay, device registration, file transfer, unattended access, installer, signing or automatic update exists. Later milestones remain open.
 - No performance benchmark, long-duration leak soak, broad Windows/DPI compatibility certification or independent security audit is claimed.
@@ -38,4 +38,4 @@ Milestone 1 has application-level verification. Milestone 2 local capture accept
 
 ## Next concrete action
 
-Complete the portable build and GitHub publication, provide the runnable ZIP and LAN guide, obtain two-computer acceptance, then begin Milestone 4 permission-gated remote input. Continue building, testing, fixing and committing each verified increment; do not mark the overall project complete from this candidate.
+Begin Milestone 4 permission-gated remote input after the accepted LAN milestone. Continue building, testing, fixing and committing each verified increment; do not mark the overall project complete from this candidate.

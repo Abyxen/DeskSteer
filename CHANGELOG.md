@@ -7,8 +7,12 @@
 - Added Host/Connect WPF workflows with active indicators, stop/disconnect and transient connection details.
 - Added bounded JPEG quality-75 streaming, dimension validation before WIC decoding and received-frame statistics.
 - Added versioned framed messages with strict sequence/type/length validation and bounded authentication attempts.
-- Added two-computer LAN setup/acceptance guide. Release build passed with zero warnings/errors and all 83 native-enabled local tests passed, including actual capture → JPEG → TLS → viewer decode. Milestone 3 remains pending two-computer acceptance.
-- No automatic firewall changes, remote input, audio, file transfer or internet relay.
+- Added two-computer LAN setup/acceptance guide. Release build passed with zero warnings/errors and all 83 native-enabled local tests passed, including actual capture → JPEG → TLS → viewer decode. The user reported all LAN checks passed on two authorized Windows computers, accepting Milestone 3; the agent did not inspect that session and no OS versions/duration were supplied.
+- Added a separate passing backpressure regression after the 83-test full run; 84 checks have passing evidence across those runs, not a combined 84-test run.
+- Windows CI passed 77 tests with six native graphics checks skipped; local native evidence remains separate.
+- Packaged a self-contained Windows x64 candidate with .NET runtime 10.0.13; extraction/startup smoke testing passed.
+- Milestone 4 is in design. No automatic firewall changes, remote input, audio, file transfer or internet relay.
+
 ## 0.2.0 — 2026-10-14 — local capture preview
 
 - Added an `IScreenCapture` boundary, Windows Graphics Capture implementation and system selection picker.
@@ -28,3 +32,4 @@
 - Added seven foundation tests, build helper and Windows CI definition.
 - Added milestone, protocol, architecture, security and setup documentation.
 - Build/tests verified; interactive UI acceptance was pending at this version. Remote desktop functionality was not implemented.
+
