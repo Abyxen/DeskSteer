@@ -1,4 +1,4 @@
-param([string]$DestinationPath = (Join-Path $PSScriptRoot '..\ProjectRemote-LAN-0.3.0-win-x64.zip'))
+param([string]$DestinationPath = (Join-Path $PSScriptRoot '..\DeskSteer-LAN-0.3.1-win-x64.zip'))
 $ErrorActionPreference = 'Stop'
 Set-Location $PSScriptRoot
 $destination = [IO.Path]::GetFullPath($DestinationPath)
@@ -11,13 +11,13 @@ $localSdk = Join-Path $workspace 'work\dotnet\dotnet.exe'
 $sdk = if (Test-Path $localSdk) { $localSdk } else { 'dotnet' }
 $staging = Join-Path $PSScriptRoot ('artifacts\package\' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $staging -Force | Out-Null
-& $sdk publish src/RemoteDesktop.App/RemoteDesktop.App.csproj -c Release -r win-x64 --self-contained true -m:1 --disable-build-servers -p:PublishTrimmed=false -p:PublishSingleFile=false "-p:RestoreConfigFile=$PSScriptRoot\NuGet.Config" -o $staging
+& $sdk publish src/DeskSteer.App/DeskSteer.App.csproj -c Release -r win-x64 --self-contained true -m:1 --disable-build-servers -p:PublishTrimmed=false -p:PublishSingleFile=false "-p:RestoreConfigFile=$PSScriptRoot\NuGet.Config" -o $staging
 if ($LASTEXITCODE) { throw 'Portable publish failed' }
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'docs\lan-test.md') -Destination (Join-Path $staging 'LAN-TEST.md')
 $notices = Join-Path $staging 'ThirdPartyNotices'
 New-Item -ItemType Directory -Path $notices | Out-Null
-$runtimeConfig = Get-Content -LiteralPath (Join-Path $staging 'RemoteDesktop.App.runtimeconfig.json') -Raw | ConvertFrom-Json
-$dependencyManifest = Get-Content -LiteralPath (Join-Path $staging 'RemoteDesktop.App.deps.json') -Raw | ConvertFrom-Json
+$runtimeConfig = Get-Content -LiteralPath (Join-Path $staging 'DeskSteer.App.runtimeconfig.json') -Raw | ConvertFrom-Json
+$dependencyManifest = Get-Content -LiteralPath (Join-Path $staging 'DeskSteer.App.deps.json') -Raw | ConvertFrom-Json
 $packages = @($dependencyManifest.libraries.PSObject.Properties | Where-Object { $_.Value.type -eq 'package' } | ForEach-Object { $_.Name.ToLowerInvariant() })
 foreach ($framework in $runtimeConfig.runtimeOptions.includedFrameworks) {
     $packages += $framework.name.ToLowerInvariant() + '.runtime.win-x64/' + $framework.version

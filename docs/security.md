@@ -1,6 +1,6 @@
 # Security and privacy
 
-## Implemented in the 0.3.0 candidate
+## Implemented in DeskSteer 0.3.1
 
 - Windows picker explicitly selects a source; the normal capture border/cursor defaults remain. Local preview stays local. **Approved LAN sharing transmits the selected screen pixels** to the approved viewer over TLS.
 - TLS 1.2/1.3 validates an exact SHA-256 certificate pin, expected server name, validity, server-auth usage and a custom-trust chain. The fingerprint must be verified through a separate trusted channel. There is no accept-any-certificate callback.
@@ -16,9 +16,9 @@ Session certificates are generated per host. Schannel-compatible private-key loa
 
 ## Remaining boundaries
 
-Milestone 3 awaits two-computer acceptance. Local test results and failures are tracked in [project status](../PROJECT_STATUS.md); no independent security audit, fuzz campaign or production guarantee is claimed.
+Milestone 3 was accepted from user-reported two-computer checks on the earlier 0.3.0 build. DeskSteer 0.3.1 is its branding rebuild; no new two-computer inspection is claimed. Local test results and failures are tracked in [project status](../PROJECT_STATUS.md); no independent security audit, fuzz campaign or production guarantee is claimed.
 
-Remote keyboard/mouse input, audio, file transfer, persistent device identity/trust, unattended access, startup registration, privilege elevation, installers, signed updates and internet traversal are unimplemented. Compromised endpoints and compromised channels used to verify fingerprints are outside this prototype's protection. Local preferences are not encrypted and use last-writer-wins across app instances. Normal launch stores them under `%LOCALAPPDATA%/ProjectRemote`; the build helper uses workspace test data.
+Remote keyboard/mouse input, audio, file transfer, persistent device identity/trust, unattended access, startup registration, privilege elevation, installers, signed updates and internet traversal are unimplemented. Compromised endpoints and compromised channels used to verify fingerprints are outside this prototype's protection. Local preferences are not encrypted and use last-writer-wins across app instances. Normal launch stores them under `%LOCALAPPDATA%/DeskSteer`; the build helper uses workspace test data.
 
 Dependencies are pinned in project files: Microsoft.Extensions.DependencyInjection/Logging 10.0.0 (MIT), xunit 2.9.3 (Apache-2.0), xunit.runner.visualstudio 3.1.5 (Apache-2.0), Microsoft.NET.Test.Sdk 17.14.1 (MIT). These versions are not a claim that they are newest; review package advisories before distribution.
 

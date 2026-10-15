@@ -1,20 +1,22 @@
-# Project Remote
+# DeskSteer
 
 An original Windows remote-desktop application, developed in verified milestones.
 
-**Current build: 0.3.0 LAN candidate.** Milestones 1 and 2 are verified on the current machine, including the user's manual picker/window/display checks. The application now implements view-only sharing over pinned TLS on a private IPv4 network. **Milestone 3 is accepted based on the user reporting that all LAN checks passed on two authorized Windows computers.** The agent did not inspect that two-computer session; OS versions and duration were not supplied. Release compilation passed with zero warnings/errors; the 83-test native-enabled local run and a separate backpressure regression passed. Milestone 4 is in design; remote input is not implemented. See [project status](PROJECT_STATUS.md) for evidence.
+**Current build: DeskSteer 0.3.1 LAN candidate.** Milestones 1 and 2 are verified on the current machine, including the user's manual picker/window/display checks. The application now implements view-only sharing over pinned TLS on a private IPv4 network. **Milestone 3 is accepted based on the user reporting that all LAN checks passed on two authorized Windows computers.** The agent did not inspect that two-computer session; OS versions and duration were not supplied. The renamed source passed Release compilation with zero warnings/errors and all 84 native-enabled tests (27 application, 7 core, 50 transport), before the final 0.3.1 metadata bump. Milestone 4 is in design; remote input is not implemented. See [project status](PROJECT_STATUS.md) for evidence.
 
-The [self-contained Windows x64 candidate](../ProjectRemote-LAN-0.3.0-win-x64-candidate.zip) bundles .NET runtime 10.0.13; extract all files and run `RemoteDesktop.App.exe`. Archive extraction/startup smoke testing passed. See the [LAN guide](docs/lan-test.md) for setup and its checksum.
+The [branded package](../DeskSteer-LAN-0.3.1-win-x64-candidate.zip) is built. Its SHA-256 is recorded in the [LAN guide](docs/lan-test.md). Extract all files and run `DeskSteer.App.exe`. The earlier accepted 0.3.0 archive retains its original branding and historical checksum; it is not the DeskSteer rebuild. See the [LAN guide](docs/lan-test.md) for setup and current artifact status.
+
+Repository: [Abyxen/DeskSteer](https://github.com/Abyxen/DeskSteer). The repository is public.
 
 ## Run
 
 Install the .NET 10 SDK with Windows desktop support, then from this directory:
 
 ```powershell
-dotnet restore ProjectRemote.slnx --configfile NuGet.Config
-dotnet build ProjectRemote.slnx -c Release
-dotnet test ProjectRemote.slnx -c Release
-dotnet run --project src/RemoteDesktop.App
+dotnet restore DeskSteer.slnx --configfile NuGet.Config
+dotnet build DeskSteer.slnx -c Release
+dotnet test DeskSteer.slnx -c Release
+dotnet run --project src/DeskSteer.App
 ```
 
 In the supplied workspace, `build.ps1` uses the SDK downloaded to `../../work/dotnet`. Run `./build.ps1 -Launch` to build, test and launch. It isolates build caches and application test data under `../../work`; use a fresh terminal afterward because the script adjusts process environment variables. The SDK is not a system-wide installation.
@@ -30,7 +32,6 @@ For a two-computer session, follow [LAN setup and acceptance](docs/lan-test.md).
 - Private IPv4/loopback binding only, expiring pairing details, bounded authentication attempts, heartbeats and session timeouts.
 - Separate Core, Capture, Transport and WPF App projects, xUnit tests and Windows CI configuration.
 
-There is no remote keyboard/mouse input, audio, device persistence, file transfer, internet relay or unattended access. Branding remains partly distributed across application resources, strings and metadata. This is a development candidate, not a production release.
+There is no remote keyboard/mouse input, audio, device persistence, file transfer, internet relay or unattended access. The solution, projects, executable, UI and configuration names now use DeskSteer. Prior milestone acceptance refers to the earlier branded build; the rebuild is not a new two-computer acceptance claim. This is a development candidate, not a production release.
 
 See [project status](PROJECT_STATUS.md), [setup](docs/development-setup.md), [architecture](docs/architecture.md), [protocol](docs/protocol.md), [testing](docs/testing.md) and [security](docs/security.md).
-

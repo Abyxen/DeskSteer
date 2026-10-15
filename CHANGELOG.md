@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 — 2026-10-15 — DeskSteer branding rebuild
+
+- Renamed the product, UI, solution, projects, namespaces, executable and configuration variables to DeskSteer; entry points are `DeskSteer.slnx` and `DeskSteer.App.exe`.
+- Renamed GitHub hosting to Abyxen/DeskSteer; public visibility is confirmed.
+- The renamed source passed the full native-enabled Release suite: 84 tests (27 application, 7 core, 50 transport), zero failures/skips and zero build warnings/errors, before the final version-metadata bump.
+- Built `DeskSteer-LAN-0.3.1-win-x64-candidate.zip` after 78 package-validation tests passed with six native checks skipped; its checksum is recorded in the LAN guide. Earlier 0.3.0 acceptance/artifact records retain their historical identity.
+- Milestone 3 remains accepted from user-reported two-computer checks on the earlier 0.3.0 build. Milestone 4 is design only; remote input is not implemented.
+
 ## 0.3.0 — 2026-10-15 — view-only LAN candidate
 
 - Added private IPv4/loopback TCP transport with pinned TLS 1.2/1.3, ephemeral certificate and random expiring pairing code.
@@ -32,4 +40,3 @@
 - Added seven foundation tests, build helper and Windows CI definition.
 - Added milestone, protocol, architecture, security and setup documentation.
 - Build/tests verified; interactive UI acceptance was pending at this version. Remote desktop functionality was not implemented.
-

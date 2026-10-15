@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DeskSteer.App/DeskSteer.App.csproj" />
+    <Project Path="src/DeskSteer.Capture/DeskSteer.Capture.csproj" />
+    <Project Path="src/DeskSteer.Core/DeskSteer.Core.csproj" />
+    <Project Path="src/DeskSteer.Transport/DeskSteer.Transport.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DeskSteer.App.Tests/DeskSteer.App.Tests.csproj" />
+    <Project Path="tests/DeskSteer.Core.Tests/DeskSteer.Core.Tests.csproj" />
+    <Project Path="tests/DeskSteer.Transport.Tests/DeskSteer.Transport.Tests.csproj" />
+  </Folder>
+</Solution>

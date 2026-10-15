@@ -1,6 +1,6 @@
 # Architecture
 
-Version 0.3.0 composes WPF navigation/preferences, local capture and view-only LAN sharing. `RemoteDesktop.Core` holds navigation/storage, `IScreenCapture`, encoded-frame models and the shared bounded JPEG header validator. `RemoteDesktop.Capture` owns WinRT/Direct3D resources. `RemoteDesktop.Transport` owns private-address policy, certificate trust, framing and session lifetime. `RemoteDesktop.App` owns WPF views, JPEG encode/decode and explicit approval.
+DeskSteer 0.3.1 retains the 0.3.0 architecture and composes WPF navigation/preferences, local capture and view-only LAN sharing. `DeskSteer.Core` holds navigation/storage, `IScreenCapture`, encoded-frame models and the shared bounded JPEG header validator. `DeskSteer.Capture` owns WinRT/Direct3D resources. `DeskSteer.Transport` owns private-address policy, certificate trust, framing and session lifetime. `DeskSteer.App` owns WPF views, JPEG encode/decode and explicit approval.
 
 ```text
 App composition root → MainWindow
@@ -25,4 +25,4 @@ JPEG quality 75 encode/decode runs off the UI thread. The shared baseline-JPEG p
 
 Diagnostics retain at most 200 timestamp/fixed-event records. They omit pixels, endpoints, pins, tokens, viewer names and formatted exceptions. Preferences contain only a startup-page flag. Branding remains distributed across `App.xaml`, strings and project metadata.
 
-Milestone 3 is a candidate awaiting two-computer acceptance. Remote input, audio, file transfer, persistent device trust, internet coordination, WebRTC and relays are unimplemented.
+Milestone 3 was accepted from user-reported two-computer checks on the earlier 0.3.0 build. The renamed 0.3.1 source passed its full native-enabled local suite; its package verification/CI are tracked separately. The branding rebuild is not a new two-computer acceptance claim. Remote input, audio, file transfer, persistent device trust, internet coordination, WebRTC and relays are unimplemented.

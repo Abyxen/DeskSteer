@@ -1,6 +1,6 @@
 # LAN protocol v1
 
-Implemented in 0.3.0 by `RemoteDesktop.Transport`. This is a candidate protocol for one view-only LAN session; two-computer acceptance remains pending.
+Implemented in 0.3.0 by `DeskSteer.Transport`. This is a candidate protocol for one view-only LAN session; two-computer acceptance passed according to the user.
 
 ## Trust and lifecycle
 
