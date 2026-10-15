@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.4.0 — 2026-10-15 — remote-input candidate in progress
+## 0.4.0 — 2026-10-15 — remote-input candidate
 
 - Added protocol v2 control request/grant/revoke/release and validated fixed-size input messages. Protocol v1 peers are rejected; use the same candidate on both endpoints.
 - Added opt-in primary-display control mode; the default picker flow stays viewing only. Viewing approval and keyboard/mouse approval are separate.
 - Added focused viewer forwarding, bounded input queue/mouse pacing, host rate/authority checks and remote held-state release on revocation/stop.
 - Added Windows input mapping at normal application privilege, geometry invalidation and a topmost revoke/stop indicator with optional Ctrl+Alt+F12 registration.
-- Added 16 passing native input recording tests; real SendInput is not automated. Full candidate validation is in progress and no new ZIP or Milestone 4 acceptance is claimed.
+- Added 16 passing native input recording tests; real SendInput is not automated. Full automated candidate validation passed (128 tests, six intentionally skipped native capture checks); real two-computer input acceptance remains external.
 - Added two-computer input acceptance instructions and documented keyboard foreground scope, primary-display mouse scope, UIPI restrictions and physical/remote ownership overlap limits.
 
 ## 0.3.1 — 2026-10-15 — DeskSteer branding rebuild
